@@ -6,7 +6,7 @@
     <title>Cẩm nang Chứng minh Chương trình Toàn tập</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500;600&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
@@ -68,6 +68,47 @@
             background-position: 0 80%;
         }
 
+        /* KHỐI CSS MỚI: Trình bày chứng minh line-by-line chuẩn form */
+        .proof-container {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        .proof-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.35rem 0;
+        }
+        .assertion {
+            color: #16a34a; /* text-green-600 */
+            font-weight: 500;
+        }
+        .rule-label {
+            color: #475569; /* text-slate-600 */
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            min-width: 130px;
+            text-align: right;
+            border-left: 1px solid #e2e8f0;
+            padding-left: 0.5rem;
+        }
+        .code-row {
+            color: #1d4ed8; /* text-blue-700 */
+            font-weight: 600;
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            border-left: 2px solid #cbd5e1;
+            margin-left: 0.5rem;
+            background: #f8fafc;
+        }
+        .code-block-start {
+            color: #1d4ed8; font-weight: 600; padding-top: 0.5rem;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -107,7 +148,6 @@
             <p class="text-lg mb-4 text-slate-700">Đây là các "công thức toán" để bạn thao tác với code. Hãy đặc biệt chú ý đến <strong class="text-rose-600">Luật Gán</strong> và tư duy làm ngược.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
                 <!-- Luật Gán -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-rose-500">
                     <h3 class="text-xl font-bold mb-3 text-rose-700">A. Luật Gán (Phép Thế - Substitution)</h3>
@@ -116,13 +156,6 @@
                         <span class="text-green-400">{ Q[E/x] }</span> &larr; Thay mọi chữ x trong Q bằng E<br>
                         x = E;<br>
                         <span class="text-green-400">{ Q }</span> &larr; Hậu điều kiện muốn đạt tới
-                    </div>
-                    <div class="bg-rose-50 p-3 rounded text-sm text-slate-800">
-                        <strong>Ví dụ (Tại sao `{list_a[i] == list_a[i]}`?):</strong><br>
-                        Ta muốn sau khi gán, <code class="bg-white px-1">lowest == list_a[i]</code>.<br>
-                        Lệnh là: <code class="bg-white px-1 text-blue-700">lowest = list_a[i];</code><br>
-                        => Thay chữ <code class="bg-white px-1">lowest</code> bằng <code class="bg-white px-1">list_a[i]</code> vào điều kiện dưới.<br>
-                        <strong>Kết quả (Tiền điều kiện):</strong> <span class="code-font text-green-700">{ list_a[i] == list_a[i] }</span> (Luôn ĐÚNG).
                     </div>
                 </div>
 
@@ -133,9 +166,6 @@
                     <div class="bg-slate-800 text-white p-4 rounded code-font text-sm mb-3">
                         Nếu <span class="text-yellow-400">P &implies; P'</span> và <span class="text-green-400">{ P' } C { Q }</span><br>
                         Thì suy ra: <span class="text-green-400">{ P } C { Q }</span>
-                    </div>
-                    <div class="bg-amber-50 p-3 rounded text-sm text-slate-800">
-                        <strong>Ý nghĩa:</strong> Khi bạn thấy chữ <code class="font-bold">implied</code>, nghĩa là: "Từ khẳng định A ở trên, theo logic toán học hiển nhiên suy ra được khẳng định B ở dưới, ta kết nối chúng lại."
                     </div>
                 </div>
 
@@ -154,7 +184,7 @@
 
                 <!-- Luật Vòng Lặp -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-purple-500">
-                    <h3 class="text-xl font-bold mb-3 text-purple-700">D. Luật Vòng lặp (While)</h3>
+                    <h3 class="text-xl font-bold mb-3 text-purple-700">D. Luật Vòng lặp (While) cơ bản</h3>
                     <p class="mb-3 text-sm text-slate-700">Yêu cầu phải có một <strong>Bất Biến (Loop Invariant - I)</strong>. Đây là một sự thật luôn luôn ĐÚNG ở 3 thời điểm: trước, trong mỗi chu kỳ, và sau khi thoát vòng lặp.</p>
                     <div class="bg-slate-800 text-white p-4 rounded code-font text-sm">
                         <span class="text-green-400">{ I }</span><br>
@@ -169,151 +199,376 @@
             </div>
         </section>
 
-        <!-- Phần 3: Giao diện Khối Chứng minh -->
-        <section class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2">3. Giao diện Khối Chứng minh</h2>
-            <p class="mb-4 text-lg">Để dễ đọc, chúng ta sẽ gộp các bước chứng minh thành các "Khối" (Block). Mỗi khối hoàn chỉnh một Bộ ba Hoare:</p>
+        <!-- Phần 3: Đào sâu Luật IF-ELSE -->
+        <section class="bg-pink-50 p-8 rounded-2xl shadow-sm border border-pink-200">
+            <h2 class="text-3xl font-bold mb-6 text-pink-900 border-b border-pink-200 pb-2">3. Phân tích sâu: Chứng minh cấu trúc Rẽ nhánh (If - Else)</h2>
+            <p class="mb-4 text-lg text-slate-700">Khi gặp lệnh <code>if (B) { C1 } else { C2 }</code>, chương trình sẽ chia làm 2 vũ trụ song song. Để chứng minh Hậu điều kiện <strong>{ Q }</strong> là đúng, ta phải chứng minh <strong>cả 2 nhánh đều phải dẫn đến cùng một cái đích { Q }</strong>.</p>
             
-            <div class="hoare-block code-font text-sm">
-                <div class="hoare-pre">{ Tiền điều kiện (Precondition): Trạng thái trước khi chạy }</div>
-                <div class="hoare-code">
-                    // Code thực thi<br>
-                    <div class="math-implied">
-                        // Các bước suy luận toán học (Implied/Luật hệ quả) nằm ở đây
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                <!-- Formal Rule -->
+                <div class="bg-slate-800 text-white p-6 rounded-xl code-font text-sm flex flex-col justify-center">
+                    <div class="text-slate-400 mb-2 border-b border-slate-600 pb-2">Công thức suy diễn logic (Formal Rule):</div>
+                    <div class="mt-2 text-center text-lg space-y-2">
+                        <div><span class="text-green-400">{ P &and; B }</span> C1 <span class="text-green-400">{ Q }</span> <span class="text-slate-400 text-sm ml-2">(Nhánh IF)</span></div>
+                        <div><span class="text-green-400">{ P &and; &not;B }</span> C2 <span class="text-green-400">{ Q }</span> <span class="text-slate-400 text-sm ml-2">(Nhánh ELSE)</span></div>
+                        <hr class="border-slate-500 my-3">
+                        <div class="font-bold text-blue-300">
+                            { P } if (B) C1 else C2 { Q }
+                        </div>
                     </div>
                 </div>
-                <div class="hoare-post">{ Hậu điều kiện (Postcondition): Trạng thái sau khi chạy }</div>
+
+                <!-- Bí kíp thực chiến -->
+                <div class="bg-white p-6 rounded-xl border border-pink-300 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-pink-500 text-white px-3 py-1 text-xs font-bold rounded-bl-lg">BÍ KÍP THỰC CHIẾN</div>
+                    <h3 class="font-bold text-pink-800 text-lg mb-2">Cách giải ngược (Bottom-Up) cho If-Else:</h3>
+                    <p class="text-sm text-slate-600 mb-3">Trong thực tế, ta thường <strong>biết trước { Q }</strong> (cái đích cần đến), và <strong>biết trước { P }</strong> (tiền điều kiện đầu vào). Các bước làm chuẩn xác là:</p>
+                    <ul class="text-sm text-slate-700 space-y-2 list-decimal pl-5">
+                        <li>Dùng <strong>Luật Gán</strong> đẩy <code class="bg-pink-100 px-1 rounded text-pink-800">{ Q }</code> ngược lên qua lệnh <code>C1</code> để tìm ra điều kiện <code class="font-bold text-green-600">Q1</code>.</li>
+                        <li>Dùng <strong>Luật Gán</strong> đẩy <code class="bg-pink-100 px-1 rounded text-pink-800">{ Q }</code> ngược lên qua lệnh <code>C2</code> để tìm ra điều kiện <code class="font-bold text-green-600">Q2</code>.</li>
+                        <li>Dùng <strong>Luật Hệ quả (Implied)</strong> chứng minh 2 điều toán học sau:
+                            <div class="bg-pink-50 p-2 mt-1 rounded border border-pink-200 code-font text-xs">
+                                1. ( P &and; B ) &implies; Q1<br>
+                                2. ( P &and; &not;B ) &implies; Q2
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-pink-100/50 p-4 rounded-lg border border-pink-200 text-sm text-pink-900">
+                <strong>💡 Lưu ý:</strong> Tại sao lại có bước 3? Vì khi đi vào nhánh IF, ta chắc chắn rằng biểu thức điều kiện <code>B</code> là đúng. Nên ta được quyền gộp <code>P</code> và <code>B</code> lại để làm điểm tựa suy luận ra <code>Q1</code>. Tương tự với nhánh ELSE, ta có điểm tựa là <code>P</code> và <code>&not;B</code>.
             </div>
         </section>
 
-        <!-- Phần 4: Ví dụ 1 -->
-        <section class="bg-slate-50 p-8 rounded-2xl shadow-sm border border-slate-200">
-            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b pb-2">Ví dụ 1: Tính tổng từ 1 đến N</h2>
+        <!-- Phần 4: Đào sâu Luật WHILE -->
+        <section class="bg-cyan-50 p-8 rounded-2xl shadow-sm border border-cyan-200">
+            <h2 class="text-3xl font-bold mb-6 text-cyan-900 border-b border-cyan-200 pb-2">4. Phân tích sâu: Vòng lặp While & Bí ẩn của "Bất Biến" (Invariant)</h2>
+            <p class="mb-4 text-lg text-slate-700">Khác với lệnh gán hay if-else, vòng lặp <code>while</code> có thể chạy số lần không xác định. Để chứng minh, ta <strong>không thể chạy tay từng vòng</strong>. Ta phải tìm ra một <strong>Bất biến (Loop Invariant - Ký hiệu là I)</strong>.</p>
             
-            <div class="bg-blue-100 border border-blue-300 p-4 rounded-lg mb-8">
-                <h3 class="text-xl font-bold text-blue-900">Mục tiêu (Hậu điều kiện cuối cùng):</h3>
-                <p class="code-font text-blue-800 mt-2 font-bold">{ S = Tổng các số từ 1 đến N }</p>
+            <div class="bg-white p-5 rounded-xl border border-cyan-300 shadow-sm mb-6">
+                <h3 class="font-bold text-cyan-800 text-lg mb-2">Bất biến (Invariant) thực chất là gì?</h3>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Hãy tưởng tượng Bất biến là một <strong>"Chiếc mỏ neo"</strong>. Dù vòng lặp có cuộn trào bao nhiêu lần, chiếc mỏ neo này luôn luôn giữ một sự thật toán học không bao giờ thay đổi.<br>
+                    Nó phải đủ <strong>yếu</strong> để đúng ngay từ khi chưa chạy vòng lặp nào, nhưng phải đủ <strong>mạnh</strong> để khi kết hợp với điều kiện thoát vòng lặp, nó giúp ta suy ra được cái đích cuối cùng.
+                </p>
             </div>
 
-            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 1: Khởi tạo</h3>
-            <div class="hoare-block code-font text-sm">
-                <div class="hoare-pre">{ N &ge; 0 }</div>
-                <div class="hoare-code">
-                    int i = 0;<br>
-                    int S = 0;<br>
+            <!-- 3 Giai đoạn -->
+            <h3 class="font-bold text-cyan-900 text-xl mb-4 mt-8">3 Bài kiểm tra khắt khe của Bất Biến (I):</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-5 rounded-xl border-t-4 border-t-cyan-500 shadow-sm relative">
+                    <div class="absolute -top-3 left-4 bg-cyan-500 text-white w-6 h-6 flex items-center justify-center rounded-full font-bold text-xs">1</div>
+                    <h3 class="font-bold text-cyan-800 text-lg mb-1 mt-2">Khởi tạo (Init)</h3>
+                    <p class="text-xs text-slate-600 mb-3">Trước khi vào loop, <code>I</code> phải đúng.</p>
+                    <div class="code-font bg-slate-800 text-green-400 p-2 rounded text-sm text-center">Tiền đ.kiện &implies; { I }</div>
                 </div>
-                <div class="hoare-post">{ I: S = Tổng(1..i) &and; i &le; N }</div>
-            </div>
-
-            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 2: Vòng lặp (Bảo toàn Bất biến)</h3>
-            <div class="hoare-block code-font text-sm">
-                <div class="hoare-pre">{ I &and; (i < N) }</div>
-                <div class="hoare-code">
-                    <div class="math-implied">
-                        <strong>Luật Gán lùi:</strong> Muốn có { S = Tổng(1..i) } sau lệnh i++, trước đó cần { S = Tổng(1..i-1) }.<br>
-                        Muốn có { S = Tổng(1..i-1) } sau lệnh S = S + i, trước đó cần { S + i = Tổng(1..i) }.
-                    </div>
-                    S = S + i;<br>
-                    i++;<br>
+                <div class="bg-white p-5 rounded-xl border-t-4 border-t-indigo-500 shadow-sm relative">
+                    <div class="absolute -top-3 left-4 bg-indigo-500 text-white w-6 h-6 flex items-center justify-center rounded-full font-bold text-xs">2</div>
+                    <h3 class="font-bold text-indigo-800 text-lg mb-1 mt-2">Bảo toàn (Maintain)</h3>
+                    <p class="text-xs text-slate-600 mb-3">Chạy 1 vòng xong, <code>I</code> vẫn phải đúng.</p>
+                    <div class="code-font bg-slate-800 text-green-400 p-2 rounded text-sm text-center">{ I &and; B } Code { I }</div>
                 </div>
-                <div class="hoare-post">{ I }</div>
-            </div>
-
-            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 3: Thoát vòng lặp</h3>
-            <div class="hoare-block code-font text-sm">
-                <div class="hoare-pre">{ I &and; &not;(i < N) }</div>
-                <div class="hoare-code">
-                    <div class="math-implied">
-                        <strong>Implied:</strong> (i &le; N) &and; (i &ge; N) &implies; i = N.<br>
-                        Thay i = N vào I: S = Tổng(1..N)
-                    </div>
-                </div>
-                <div class="hoare-post">{ S = Tổng(1..N) }</div>
-            </div>
-        </section>
-
-        <!-- Phần 5: Phân tích bài toán LCA của User -->
-        <section class="bg-indigo-50 p-8 rounded-2xl shadow-sm border border-indigo-200">
-            <h2 class="text-3xl font-bold mb-4 text-indigo-900 border-b border-indigo-200 pb-2">Ví dụ 2: Tìm Tổ tiên chung gần nhất (LCA)</h2>
-            <p class="mb-6 text-slate-700">Đây là bài toán của bạn. Chúng ta sẽ dùng <strong>Luật Gán lùi</strong> và <strong>Luật Hệ Quả (Implied)</strong> để giải thích chính xác tại sao các lệnh lại móc nối được với nhau.</p>
-            
-            <div class="bg-white border border-indigo-300 p-4 rounded-lg mb-8 shadow-sm">
-                <h3 class="text-xl font-bold text-indigo-800">Mục tiêu cuối cùng:</h3>
-                <p class="code-font text-indigo-900 mt-2 font-bold">{ lowest == LCA (Tổ tiên chung gần nhất) }</p>
-                <div class="mt-4 border-t pt-4">
-                    <strong class="text-slate-700">Bất biến I:</strong> <code class="text-green-700 code-font">lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k])</code>
+                <div class="bg-white p-5 rounded-xl border-t-4 border-t-emerald-500 shadow-sm relative">
+                    <div class="absolute -top-3 left-4 bg-emerald-500 text-white w-6 h-6 flex items-center justify-center rounded-full font-bold text-xs">3</div>
+                    <h3 class="font-bold text-emerald-800 text-lg mb-1 mt-2">Kết thúc (Terminate)</h3>
+                    <p class="text-xs text-slate-600 mb-3">Thoát loop, <code>I</code> giúp suy ra kết quả.</p>
+                    <div class="code-font bg-slate-800 text-green-400 p-2 rounded text-sm text-center">{ I &and; &not;B } &implies; { Q }</div>
                 </div>
             </div>
 
-            <h3 class="font-bold text-slate-700 mb-3">Bước 1: Thiết lập cấu trúc</h3>
-            <div class="hoare-block code-font text-sm border-indigo-200">
-                <div class="hoare-pre">{ list_a[0] == list_b[0] == root }</div>
-                <div class="hoare-code">
-                    int i = 1;<br>
-                    int lowest = list_a[0];<br>
-                </div>
-                <div class="hoare-post">{ I: lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k]) }</div>
-            </div>
-
-            <h3 class="font-bold text-slate-700 mb-3 mt-8 text-xl border-l-4 border-rose-500 pl-3">Bước 2: Giải phẫu nội tạng Vòng lặp (Mấu chốt vấn đề)</h3>
-            <p class="text-sm text-slate-600 mb-4">Làm sao từ đầu vòng lặp, chạy qua 2 lệnh gán, ta lại quay về đúng Bất Biến ban đầu? Hãy đọc ngược từ dưới lên.</p>
-            
-            <div class="hoare-block code-font text-sm border-indigo-300 shadow-md">
-                <div class="hoare-pre text-indigo-900 bg-indigo-100 border-b border-indigo-200">
-                    <span class="text-slate-500">// ĐẦU VÒNG LẶP (Có Bất biến VÀ Điều kiện Loop)</span><br>
-                    { I &and; (list_a[i] == list_b[i]) }
-                </div>
+            <!-- Tuyệt chiêu tìm Bất biến -->
+            <div class="bg-gradient-to-br from-cyan-800 to-blue-900 text-white p-6 rounded-xl shadow-md">
+                <h3 class="font-bold text-cyan-200 text-xl mb-3 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    Làm sao để tự nghĩ ra Bất Biến (Invariant)?
+                </h3>
+                <p class="text-sm text-cyan-100 mb-4">Tìm Bất biến là phần khó nhất. 90% trường hợp, Bất biến <code>I</code> chính là <strong>Hậu điều kiện { Q } bị "làm yếu đi"</strong>. Dưới đây là 2 kỹ thuật phổ biến nhất:</p>
                 
-                <div class="hoare-code bg-white">
-                    <div class="math-implied">
-                        <strong>Luật Hệ Quả (Implied):</strong> Từ khẳng định phía trên, ta biết mọi node trước `i` giống nhau (nhờ I) VÀ node tại `i` cũng giống nhau (nhờ ĐK Loop).<br>
-                        => <strong>Suy ra (Implies):</strong> Mọi node từ `0` đến `i` là giống nhau. Ta gọi trạng thái này là <strong>P2</strong>.
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white/10 p-4 rounded border border-white/20">
+                        <div class="font-bold text-yellow-300 mb-1">Thủ thuật 1: Thay hằng số bằng biến</div>
+                        <p class="text-xs text-slate-200 mb-2">Biến Hậu điều kiện từ "hoàn thành toàn bộ" thành "hoàn thành một phần".</p>
+                        <div class="bg-black/30 p-2 rounded text-xs code-font">
+                            Mục tiêu (Q): S = Tổng(1..<strong class="text-rose-400">N</strong>)<br>
+                            Biến N thành biến đếm i.<br>
+                            => Bất biến (I): S = Tổng(1..<strong class="text-green-400">i</strong>)
+                        </div>
                     </div>
-
-                    <span class="text-green-600 font-bold">{ P2: Mọi k &le; i, list_a[k] == list_b[k] }</span><br><br>
-                    
-                    lowest = list_a[i];<br><br>
-
-                    <div class="math-implied border-l-rose-500 text-rose-700 bg-rose-50">
-                        <strong>Luật Gán (Tính ngược):</strong> Dựa vào trạng thái P1 ở dưới, thay `lowest` bằng `list_a[i]`, ta được <code>list_a[i] == list_a[i] &and; (Mọi k &le; i, list_a[k]...)</code>.<br>
-                        Vì <code>list_a[i] == list_a[i]</code> luôn đúng, nó bị triệt tiêu. Phần còn lại khớp y hệt <strong>P2</strong> ở trên!
-                    </div>
-
-                    <span class="text-green-600 font-bold">{ P1: lowest == list_a[i] &and; (Mọi k &le; i, list_a[k] == list_b[k]) }</span><br><br>
-                    
-                    i++;<br><br>
-
-                    <div class="math-implied border-l-rose-500 text-rose-700 bg-rose-50">
-                        <strong>Luật Gán (Tính ngược):</strong> Lấy Hậu điều kiện <strong>{ I }</strong> ở tuốt dưới cùng, thay mọi chữ <code>i</code> thành <code>(i+1)</code>.<br>
-                        <code>lowest == list_a[(i+1)-1]</code> => Trở thành <code>lowest == list_a[i]</code><br>
-                        <code>Mọi k < (i+1)</code> => Trở thành <code>Mọi k &le; i</code><br>
-                        => Ghép lại, nó khớp chính xác 100% với trạng thái <strong>P1</strong> ở trên!
+                    <div class="bg-white/10 p-4 rounded border border-white/20">
+                        <div class="font-bold text-yellow-300 mb-1">Thủ thuật 2: Xóa bớt một điều kiện</div>
+                        <p class="text-xs text-slate-200 mb-2">Nếu Q có dạng <code>A &and; B</code>, ta lấy <code>A</code> làm Bất biến, và <code>&not;B</code> làm điều kiện vòng lặp.</p>
+                        <div class="bg-black/30 p-2 rounded text-xs code-font">
+                            Mục tiêu (Q): Mảng sắp xếp &and; <strong class="text-rose-400">i == N</strong><br>
+                            Lấy nửa đầu làm Bất biến.<br>
+                            => Bất biến (I): Mảng đã sắp xếp đến i.
+                        </div>
                     </div>
                 </div>
-
-                <div class="hoare-post text-indigo-900 bg-indigo-100 border-t border-indigo-200">
-                    <span class="text-slate-500">// CUỐI VÒNG LẶP (Đã bảo toàn thành công Bất biến)</span><br>
-                    { I: lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k]) }
-                </div>
-            </div>
-
-            <h3 class="font-bold text-slate-700 mb-3 mt-8">Bước 3: Thoát vòng lặp & Kết luận</h3>
-            <div class="hoare-block code-font text-sm border-indigo-200">
-                <div class="hoare-pre">{ I &and; (i &ge; size_a &or; i &ge; size_b &or; list_a[i] != list_b[i]) }</div>
-                <div class="hoare-code">
-                    <div class="math-implied">
-                        <strong>Implied:</strong> Do Bất biến I bảo đảm mọi phần tử trước i giống nhau, nên khi vòng lặp dừng lại (nghĩa là 2 nhánh bắt đầu rẽ hướng hoặc đã chạm đích), phần tử chung cuối cùng chính là (i-1). Mà lowest hiện đang lưu list_a[i-1]. Suy ra lowest là LCA.
-                    </div>
-                </div>
-                <div class="hoare-post">{ lowest == LCA }</div>
             </div>
         </section>
+
+        <!-- ========================================== -->
+        <!-- PHẦN THỰC CHIẾN MỚI (LINE-BY-LINE FORMAT)  -->
+        <!-- ========================================== -->
         
-        <div class="text-center text-slate-500 text-sm mt-8 pb-8">
-            <p>Trang web này bao hàm đầy đủ từ Khái niệm Hoare Triple, Luật Gán, Luật Hệ Quả cho tới phân tích Block.</p>
+        <div class="mt-12 mb-6">
+            <h1 class="text-4xl font-extrabold text-slate-900 text-center border-b-4 border-blue-500 pb-4 w-max mx-auto">THỰC CHIẾN CHỨNG MINH LINE-BY-LINE</h1>
+            <p class="text-center text-slate-600 mt-4 text-lg">Áp dụng form trình bày đầy đủ các bước (Assignment, Implied, Invariant) cho mọi dòng code.</p>
         </div>
 
-    </main>
+        <!-- Ví dụ 1: Giai thừa (Bài mẫu từ Ảnh của User) -->
+        <section class="bg-amber-50 p-8 rounded-2xl shadow-sm border border-amber-200">
+            <h2 class="text-3xl font-bold mb-4 text-amber-900 border-b border-amber-300 pb-2">Ví dụ 1: Tính Giai thừa (Bài mẫu từ hình ảnh)</h2>
+            <p class="mb-4 text-slate-700">Đây là bài toán mẫu chuẩn xác nhất thể hiện sức mạnh của <strong>Luật Gán lùi (Assignment)</strong> kết hợp với <strong>Bảo toàn Bất biến (Invariant)</strong>.</p>
+            
+            <div class="proof-container border-amber-300 shadow-md">
+                <div class="proof-row bg-amber-100 px-2 rounded">
+                    <span class="assertion text-amber-900">... Khởi tạo ban đầu ...</span>
+                    <span class="rule-label"></span>
+                </div>
+                <div class="proof-row">
+                    <span class="assertion">(| y = z! |)</span>
+                    <span class="rule-label">Pre-condition</span>
+                </div>
+                
+                <div class="code-block-start">while ( z != x ) {</div>
+                <div class="border-l-2 border-amber-200 ml-4 pl-2 my-2">
+                    
+                    <div class="proof-row bg-white">
+                        <span class="assertion">(| y = z! &and; z &ne; x |)</span>
+                        <span class="rule-label">Invariant</span>
+                    </div>
+                    <div class="proof-row bg-white">
+                        <span class="assertion">(| y &middot; (z + 1) = (z + 1)! |)</span>
+                        <span class="rule-label">Implied</span>
+                    </div>
+                    
+                    <div class="code-row text-blue-800">z = z + 1;</div>
+                    
+                    <div class="proof-row bg-white">
+                        <span class="assertion">(| y &middot; z = z! |)</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    
+                    <div class="code-row text-blue-800">y = y * z;</div>
+                    
+                    <div class="proof-row bg-white">
+                        <span class="assertion">(| y = z! |)</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    
+                </div>
+                <div class="code-block-start">}</div>
 
+                <div class="proof-row">
+                    <span class="assertion">(| y = z! &and; &not;(z &ne; x) |)</span>
+                    <span class="rule-label">Partial-while</span>
+                </div>
+                <div class="proof-row bg-amber-100 px-2 rounded mt-2">
+                    <span class="assertion">(| y = x! |)</span>
+                    <span class="rule-label">Implied</span>
+                </div>
+            </div>
+            
+            <div class="math-implied bg-white mt-4 text-slate-700 border-amber-400">
+                <strong>Giải thích Logic (Đọc từ dưới lên):</strong><br>
+                1. Để có <code>y = z!</code> sau lệnh <code>y = y * z</code>, ta thay <code>y</code> bằng <code>y * z</code> &rarr; Thu được <code>y * z = z!</code><br>
+                2. Để có <code>y * z = z!</code> sau lệnh <code>z = z + 1</code>, ta thay <code>z</code> bằng <code>z + 1</code> &rarr; Thu được <code>y * (z + 1) = (z + 1)!</code><br>
+                3. Bất biến <code>y = z!</code> hiển nhiên thỏa mãn tính chất toán học để suy ra biểu thức ở bước 2. Chứng minh thành công!
+            </div>
+        </section>
+
+        <!-- Ví dụ 2: Tính tổng 1 đến N -->
+        <section class="bg-blue-50 p-8 rounded-2xl shadow-sm border border-blue-200">
+            <h2 class="text-3xl font-bold mb-4 text-blue-900 border-b border-blue-300 pb-2">Ví dụ 2: Tính tổng từ 1 đến N</h2>
+            
+            <div class="proof-container border-blue-300 shadow-md">
+                <!-- KHỞI TẠO -->
+                <div class="proof-row bg-blue-100 px-2 rounded mb-2">
+                    <span class="assertion text-blue-900">{ N &ge; 0 }</span>
+                    <span class="rule-label">Pre-condition</span>
+                </div>
+                <div class="proof-row">
+                    <span class="assertion">{ 0 = Tổng(1..0) &and; 0 &le; N }</span>
+                    <span class="rule-label">Implied</span>
+                </div>
+                <div class="code-row">i = 0;</div>
+                <div class="proof-row">
+                    <span class="assertion">{ 0 = Tổng(1..i) &and; i &le; N }</span>
+                    <span class="rule-label">Assignment</span>
+                </div>
+                <div class="code-row">S = 0;</div>
+                <div class="proof-row bg-green-50">
+                    <span class="assertion">{ S = Tổng(1..i) &and; i &le; N }</span>
+                    <span class="rule-label">Assignment (Invariant)</span>
+                </div>
+
+                <!-- VÒNG LẶP -->
+                <div class="code-block-start mt-4">while ( i < N ) {</div>
+                <div class="border-l-2 border-blue-300 ml-4 pl-2 my-2">
+                    <div class="proof-row">
+                        <span class="assertion">{ S = Tổng(1..i) &and; i &le; N &and; i < N }</span>
+                        <span class="rule-label">Invariant</span>
+                    </div>
+                    <div class="proof-row">
+                        <span class="assertion">{ S + (i + 1) = Tổng(1..i+1) &and; i + 1 &le; N }</span>
+                        <span class="rule-label">Implied</span>
+                    </div>
+                    <div class="code-row">i = i + 1;</div>
+                    <div class="proof-row">
+                        <span class="assertion">{ S + i = Tổng(1..i) &and; i &le; N }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    <div class="code-row">S = S + i;</div>
+                    <div class="proof-row bg-green-50">
+                        <span class="assertion">{ S = Tổng(1..i) &and; i &le; N }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                </div>
+                <div class="code-block-start mb-4">}</div>
+
+                <!-- KẾT THÚC -->
+                <div class="proof-row">
+                    <span class="assertion">{ S = Tổng(1..i) &and; i &le; N &and; &not;(i < N) }</span>
+                    <span class="rule-label">Partial-while</span>
+                </div>
+                <div class="proof-row bg-blue-100 px-2 rounded mt-2">
+                    <span class="assertion">{ S = Tổng(1..N) }</span>
+                    <span class="rule-label">Implied</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ví dụ 3: LCA (Rất chi tiết) -->
+        <section class="bg-indigo-50 p-8 rounded-2xl shadow-sm border border-indigo-200">
+            <h2 class="text-3xl font-bold mb-4 text-indigo-900 border-b border-indigo-300 pb-2">Ví dụ 3: Tìm LCA (Tổ tiên chung)</h2>
+            <p class="mb-4 text-slate-700">Viết lại thuật toán LCA của bạn thành dạng line-by-line để thấy rõ logic thế biến mảng.</p>
+            
+            <div class="proof-container border-indigo-300 shadow-md">
+                
+                <div class="code-block-start">while ( i < size_a &and; i < size_b &and; list_a[i] == list_b[i] ) {</div>
+                <div class="border-l-2 border-indigo-300 ml-4 pl-2 my-2">
+                    
+                    <div class="proof-row">
+                        <span class="assertion">{ lowest == list_a[i-1] &and; (&forall;k < i, list_a[k] == list_b[k]) &and; list_a[i] == list_b[i] }</span>
+                        <span class="rule-label">Invariant</span>
+                    </div>
+                    
+                    <div class="proof-row">
+                        <span class="assertion">{ list_a[i] == list_a[i] &and; (&forall;k &le; i, list_a[k] == list_b[k]) }</span>
+                        <span class="rule-label">Implied</span>
+                    </div>
+                    
+                    <div class="code-row">lowest = list_a[i];</div>
+                    
+                    <div class="proof-row">
+                        <span class="assertion">{ lowest == list_a[i] &and; (&forall;k &le; i, list_a[k] == list_b[k]) }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    
+                    <div class="code-row">i = i + 1;</div>
+                    
+                    <div class="proof-row bg-green-50">
+                        <span class="assertion">{ lowest == list_a[i-1] &and; (&forall;k < i, list_a[k] == list_b[k]) }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    
+                </div>
+                <div class="code-block-start mb-4">}</div>
+
+                <div class="proof-row">
+                    <span class="assertion">{ I &and; &not;(Điều kiện lặp) }</span>
+                    <span class="rule-label">Partial-while</span>
+                </div>
+                <div class="proof-row bg-indigo-100 px-2 rounded mt-2">
+                    <span class="assertion">{ lowest == LCA }</span>
+                    <span class="rule-label">Implied</span>
+                </div>
+            </div>
+            
+            <div class="math-implied bg-white mt-4 border-indigo-400">
+                Ở dòng Implied bên trong vòng lặp, ta đã khéo léo biến đổi <code>(&forall;k < i) &and; (tại i)</code> thành <code>(&forall;k &le; i)</code>. Đồng thời chèn thêm mệnh đề luôn đúng <code>list_a[i] == list_a[i]</code> để dọn đường cho lệnh gán <code>lowest = list_a[i]</code> ngay bên dưới.
+            </div>
+        </section>
+
+        <!-- Ví dụ 4: Merge Array với If-Else -->
+        <section class="bg-teal-50 p-8 rounded-2xl shadow-sm border border-teal-200">
+            <h2 class="text-3xl font-bold mb-4 text-teal-900 border-b border-teal-300 pb-2">Ví dụ 4: Thuật toán Trộn (Merge Array) - Rẽ nhánh</h2>
+            <p class="mb-4 text-slate-700">Áp dụng chuẩn line-by-line cho cấu trúc IF-ELSE nằm trọn trong lòng Bất biến vòng lặp.</p>
+            
+            <div class="proof-container border-teal-300 shadow-md">
+                <div class="proof-row bg-teal-100 px-2 rounded mb-2">
+                    <span class="assertion text-teal-900">{ I: Mảng [start..run-1] đã sắp xếp &and; (run == start + i + j) }</span>
+                    <span class="rule-label">Invariant đầu loop</span>
+                </div>
+
+                <div class="code-block-start">if ( left_array[i] < right_array[j] ) {</div>
+                
+                <div class="border-l-2 border-emerald-300 ml-4 pl-2 my-2 bg-emerald-50/30">
+                    <div class="proof-row">
+                        <span class="assertion">{ I &and; left_array[i] < right_array[j] }</span>
+                        <span class="rule-label">If-Condition</span>
+                    </div>
+                    <div class="proof-row">
+                        <span class="assertion">{ I[left_array[i] / *run, run+1 / run, i+1 / i] }</span>
+                        <span class="rule-label">Implied</span>
+                    </div>
+                    <div class="code-row">*run = left_array[i];</div>
+                    <div class="proof-row">
+                        <span class="assertion">{ I[run+1 / run, i+1 / i] }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    <div class="code-row">i = i + 1;</div>
+                    <div class="proof-row bg-emerald-100/50">
+                        <span class="assertion">{ I[run+1 / run] }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                </div>
+
+                <div class="code-block-start">} else {</div>
+                
+                <div class="border-l-2 border-rose-300 ml-4 pl-2 my-2 bg-rose-50/30">
+                    <div class="proof-row">
+                        <span class="assertion">{ I &and; left_array[i] &ge; right_array[j] }</span>
+                        <span class="rule-label">Else-Condition</span>
+                    </div>
+                    <div class="proof-row">
+                        <span class="assertion">{ I[right_array[j] / *run, run+1 / run, j+1 / j] }</span>
+                        <span class="rule-label">Implied</span>
+                    </div>
+                    <div class="code-row">*run = right_array[j];</div>
+                    <div class="proof-row">
+                        <span class="assertion">{ I[run+1 / run, j+1 / j] }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                    <div class="code-row">j = j + 1;</div>
+                    <div class="proof-row bg-rose-100/50">
+                        <span class="assertion">{ I[run+1 / run] }</span>
+                        <span class="rule-label">Assignment</span>
+                    </div>
+                </div>
+
+                <div class="code-block-start">}</div>
+                
+                <div class="proof-row bg-yellow-50 mt-2">
+                    <span class="assertion text-yellow-800">{ I[run+1 / run] } &larr; Cả 2 nhánh đều hội tụ về đây</span>
+                    <span class="rule-label">Rule of If-Else</span>
+                </div>
+                
+                <div class="code-row mt-2">run = run + 1;</div>
+                
+                <div class="proof-row bg-teal-100 px-2 rounded mt-2">
+                    <span class="assertion text-teal-900">{ I }</span>
+                    <span class="rule-label">Assignment</span>
+                </div>
+
+            </div>
+            <div class="math-implied bg-white mt-4 border-teal-400 text-sm">
+                <strong>Ký hiệu:</strong> <code>I[A / B]</code> nghĩa là lấy biểu thức I, thay mọi chữ <code>B</code> bằng <code>A</code>. Rõ ràng cả 2 vũ trụ rẽ nhánh cuối cùng đều chuẩn bị sẵn sàng một trạng thái giống hệt nhau để phục vụ cho lệnh <code>run = run + 1</code> phía dưới.
+            </div>
+        </section>
+
+    </main>
 </body>
 </html>
