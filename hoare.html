@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cẩm nang Chứng minh Chương trình Toàn tập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .hoare-block {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .hoare-pre {
+            background: #ecfdf5;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px dashed #a7f3d0;
+            color: #047857;
+            font-weight: 600;
+        }
+
+        .hoare-code {
+            padding: 1.25rem 1rem;
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+
+        .hoare-post {
+            background: #ecfdf5;
+            padding: 0.75rem 1rem;
+            border-top: 1px dashed #a7f3d0;
+            color: #047857;
+            font-weight: 600;
+        }
+
+        .math-implied {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 0.75rem 1rem;
+            margin: 0.75rem 0;
+            color: #b45309;
+            font-size: 0.9rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .highlight-backward {
+            background: linear-gradient(120deg, #fef08a 0%, #fef08a 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 80%;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white py-12 px-6 shadow-lg">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl font-bold mb-4">Cẩm nang Chứng minh Chương trình</h1>
+            <p class="text-xl text-slate-300">Hoare Logic từ lý thuyết cơ bản đến thực chiến phân tích thuật toán.</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-6 space-y-12 my-8">
+
+        <!-- Phần 1: Lý thuyết cơ bản -->
+        <section class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2">1. Bộ ba Hoare (Hoare Triple) là gì?</h2>
+            <p class="mb-4 text-lg">Mọi chứng minh chương trình đều xoay quanh công thức cơ bản này:</p>
+            <div class="bg-slate-100 p-6 rounded-xl text-center mb-6">
+                <span class="text-3xl code-font"><span class="text-green-600">{ P }</span> <span class="text-blue-600">C</span> <span class="text-green-600">{ Q }</span></span>
+            </div>
+            <ul class="list-disc pl-6 space-y-2 text-lg text-slate-700">
+                <li><strong class="text-green-700">{ P } - Tiền điều kiện (Precondition):</strong> Trạng thái bắt buộc của hệ thống <em>trước</em> khi chạy lệnh.</li>
+                <li><strong class="text-blue-700">C - Lệnh (Command):</strong> Đoạn code sẽ được thực thi.</li>
+                <li><strong class="text-green-700">{ Q } - Hậu điều kiện (Postcondition):</strong> Trạng thái của hệ thống chắc chắn đạt được <em>sau</em> khi chạy xong lệnh.</li>
+            </ul>
+        </section>
+
+        <!-- Phần 2: Các luật cơ bản -->
+        <section class="space-y-6">
+            <h2 class="text-3xl font-bold text-slate-800 border-b pb-2">2. Các Luật Chứng minh Cốt lõi</h2>
+            <p class="text-lg mb-4 text-slate-700">Đây là các "công thức toán" để bạn thao tác với code. Hãy đặc biệt chú ý đến <strong class="text-rose-600">Luật Gán</strong> và tư duy làm ngược.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Luật Gán -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-rose-500">
+                    <h3 class="text-xl font-bold mb-3 text-rose-700">A. Luật Gán (Phép Thế - Substitution)</h3>
+                    <p class="mb-3 text-sm text-slate-700"><strong>Bí quyết lớn nhất: <span class="highlight-backward">LÀM NGƯỢC TỪ DƯỚI LÊN</span>.</strong> Ta ĐÃ BIẾT Hậu điều kiện muốn đạt được. Ta tìm Tiền điều kiện bằng cách thay thế biến bằng giá trị gán.</p>
+                    <div class="bg-slate-800 text-white p-4 rounded code-font text-sm mb-3">
+                        <span class="text-green-400">{ Q[E/x] }</span> &larr; Thay mọi chữ x trong Q bằng E<br>
+                        x = E;<br>
+                        <span class="text-green-400">{ Q }</span> &larr; Hậu điều kiện muốn đạt tới
+                    </div>
+                    <div class="bg-rose-50 p-3 rounded text-sm text-slate-800">
+                        <strong>Ví dụ (Tại sao `{list_a[i] == list_a[i]}`?):</strong><br>
+                        Ta muốn sau khi gán, <code class="bg-white px-1">lowest == list_a[i]</code>.<br>
+                        Lệnh là: <code class="bg-white px-1 text-blue-700">lowest = list_a[i];</code><br>
+                        => Thay chữ <code class="bg-white px-1">lowest</code> bằng <code class="bg-white px-1">list_a[i]</code> vào điều kiện dưới.<br>
+                        <strong>Kết quả (Tiền điều kiện):</strong> <span class="code-font text-green-700">{ list_a[i] == list_a[i] }</span> (Luôn ĐÚNG).
+                    </div>
+                </div>
+
+                <!-- Luật Hệ Quả -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-amber-500">
+                    <h3 class="text-xl font-bold mb-3 text-amber-700">B. Luật Hệ Quả (Implied)</h3>
+                    <p class="mb-3 text-sm text-slate-700">Dùng để "nới lỏng" hoặc "thắt chặt" các điều kiện toán học <em>mà không cần chạy qua dòng code nào</em>. Nếu P mạnh hơn P', ta có thể thay P bằng P'.</p>
+                    <div class="bg-slate-800 text-white p-4 rounded code-font text-sm mb-3">
+                        Nếu <span class="text-yellow-400">P &implies; P'</span> và <span class="text-green-400">{ P' } C { Q }</span><br>
+                        Thì suy ra: <span class="text-green-400">{ P } C { Q }</span>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded text-sm text-slate-800">
+                        <strong>Ý nghĩa:</strong> Khi bạn thấy chữ <code class="font-bold">implied</code>, nghĩa là: "Từ khẳng định A ở trên, theo logic toán học hiển nhiên suy ra được khẳng định B ở dưới, ta kết nối chúng lại."
+                    </div>
+                </div>
+
+                <!-- Luật Nối tiếp -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-blue-500">
+                    <h3 class="text-xl font-bold mb-3 text-blue-700">C. Luật Nối tiếp (Sequence)</h3>
+                    <p class="mb-3 text-sm text-slate-700">Dùng để nối nhiều dòng code lại với nhau. Điều kiện đầu ra của lệnh 1 chính là điều kiện đầu vào của lệnh 2.</p>
+                    <div class="bg-slate-800 text-white p-4 rounded code-font text-sm mb-3">
+                        <span class="text-green-400">{ P }</span><br>
+                        C1;<br>
+                        <span class="text-green-400">{ R }</span> &larr; Trạng thái trung gian<br>
+                        C2;<br>
+                        <span class="text-green-400">{ Q }</span>
+                    </div>
+                </div>
+
+                <!-- Luật Vòng Lặp -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-purple-500">
+                    <h3 class="text-xl font-bold mb-3 text-purple-700">D. Luật Vòng lặp (While)</h3>
+                    <p class="mb-3 text-sm text-slate-700">Yêu cầu phải có một <strong>Bất Biến (Loop Invariant - I)</strong>. Đây là một sự thật luôn luôn ĐÚNG ở 3 thời điểm: trước, trong mỗi chu kỳ, và sau khi thoát vòng lặp.</p>
+                    <div class="bg-slate-800 text-white p-4 rounded code-font text-sm">
+                        <span class="text-green-400">{ I }</span><br>
+                        while (B) {<br>
+                        &nbsp;&nbsp;<span class="text-green-400">{ I &and; B }</span><br>
+                        &nbsp;&nbsp;C;<br>
+                        &nbsp;&nbsp;<span class="text-green-400">{ I }</span><br>
+                        }<br>
+                        <span class="text-green-400">{ I &and; &not;B }</span> &larr; Thoát vòng lặp
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phần 3: Giao diện Khối Chứng minh -->
+        <section class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2">3. Giao diện Khối Chứng minh</h2>
+            <p class="mb-4 text-lg">Để dễ đọc, chúng ta sẽ gộp các bước chứng minh thành các "Khối" (Block). Mỗi khối hoàn chỉnh một Bộ ba Hoare:</p>
+            
+            <div class="hoare-block code-font text-sm">
+                <div class="hoare-pre">{ Tiền điều kiện (Precondition): Trạng thái trước khi chạy }</div>
+                <div class="hoare-code">
+                    // Code thực thi<br>
+                    <div class="math-implied">
+                        // Các bước suy luận toán học (Implied/Luật hệ quả) nằm ở đây
+                    </div>
+                </div>
+                <div class="hoare-post">{ Hậu điều kiện (Postcondition): Trạng thái sau khi chạy }</div>
+            </div>
+        </section>
+
+        <!-- Phần 4: Ví dụ 1 -->
+        <section class="bg-slate-50 p-8 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b pb-2">Ví dụ 1: Tính tổng từ 1 đến N</h2>
+            
+            <div class="bg-blue-100 border border-blue-300 p-4 rounded-lg mb-8">
+                <h3 class="text-xl font-bold text-blue-900">Mục tiêu (Hậu điều kiện cuối cùng):</h3>
+                <p class="code-font text-blue-800 mt-2 font-bold">{ S = Tổng các số từ 1 đến N }</p>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 1: Khởi tạo</h3>
+            <div class="hoare-block code-font text-sm">
+                <div class="hoare-pre">{ N &ge; 0 }</div>
+                <div class="hoare-code">
+                    int i = 0;<br>
+                    int S = 0;<br>
+                </div>
+                <div class="hoare-post">{ I: S = Tổng(1..i) &and; i &le; N }</div>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 2: Vòng lặp (Bảo toàn Bất biến)</h3>
+            <div class="hoare-block code-font text-sm">
+                <div class="hoare-pre">{ I &and; (i < N) }</div>
+                <div class="hoare-code">
+                    <div class="math-implied">
+                        <strong>Luật Gán lùi:</strong> Muốn có { S = Tổng(1..i) } sau lệnh i++, trước đó cần { S = Tổng(1..i-1) }.<br>
+                        Muốn có { S = Tổng(1..i-1) } sau lệnh S = S + i, trước đó cần { S + i = Tổng(1..i) }.
+                    </div>
+                    S = S + i;<br>
+                    i++;<br>
+                </div>
+                <div class="hoare-post">{ I }</div>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3 mt-6">Bước 3: Thoát vòng lặp</h3>
+            <div class="hoare-block code-font text-sm">
+                <div class="hoare-pre">{ I &and; &not;(i < N) }</div>
+                <div class="hoare-code">
+                    <div class="math-implied">
+                        <strong>Implied:</strong> (i &le; N) &and; (i &ge; N) &implies; i = N.<br>
+                        Thay i = N vào I: S = Tổng(1..N)
+                    </div>
+                </div>
+                <div class="hoare-post">{ S = Tổng(1..N) }</div>
+            </div>
+        </section>
+
+        <!-- Phần 5: Phân tích bài toán LCA của User -->
+        <section class="bg-indigo-50 p-8 rounded-2xl shadow-sm border border-indigo-200">
+            <h2 class="text-3xl font-bold mb-4 text-indigo-900 border-b border-indigo-200 pb-2">Ví dụ 2: Tìm Tổ tiên chung gần nhất (LCA)</h2>
+            <p class="mb-6 text-slate-700">Đây là bài toán của bạn. Chúng ta sẽ dùng <strong>Luật Gán lùi</strong> và <strong>Luật Hệ Quả (Implied)</strong> để giải thích chính xác tại sao các lệnh lại móc nối được với nhau.</p>
+            
+            <div class="bg-white border border-indigo-300 p-4 rounded-lg mb-8 shadow-sm">
+                <h3 class="text-xl font-bold text-indigo-800">Mục tiêu cuối cùng:</h3>
+                <p class="code-font text-indigo-900 mt-2 font-bold">{ lowest == LCA (Tổ tiên chung gần nhất) }</p>
+                <div class="mt-4 border-t pt-4">
+                    <strong class="text-slate-700">Bất biến I:</strong> <code class="text-green-700 code-font">lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k])</code>
+                </div>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3">Bước 1: Thiết lập cấu trúc</h3>
+            <div class="hoare-block code-font text-sm border-indigo-200">
+                <div class="hoare-pre">{ list_a[0] == list_b[0] == root }</div>
+                <div class="hoare-code">
+                    int i = 1;<br>
+                    int lowest = list_a[0];<br>
+                </div>
+                <div class="hoare-post">{ I: lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k]) }</div>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3 mt-8 text-xl border-l-4 border-rose-500 pl-3">Bước 2: Giải phẫu nội tạng Vòng lặp (Mấu chốt vấn đề)</h3>
+            <p class="text-sm text-slate-600 mb-4">Làm sao từ đầu vòng lặp, chạy qua 2 lệnh gán, ta lại quay về đúng Bất Biến ban đầu? Hãy đọc ngược từ dưới lên.</p>
+            
+            <div class="hoare-block code-font text-sm border-indigo-300 shadow-md">
+                <div class="hoare-pre text-indigo-900 bg-indigo-100 border-b border-indigo-200">
+                    <span class="text-slate-500">// ĐẦU VÒNG LẶP (Có Bất biến VÀ Điều kiện Loop)</span><br>
+                    { I &and; (list_a[i] == list_b[i]) }
+                </div>
+                
+                <div class="hoare-code bg-white">
+                    <div class="math-implied">
+                        <strong>Luật Hệ Quả (Implied):</strong> Từ khẳng định phía trên, ta biết mọi node trước `i` giống nhau (nhờ I) VÀ node tại `i` cũng giống nhau (nhờ ĐK Loop).<br>
+                        => <strong>Suy ra (Implies):</strong> Mọi node từ `0` đến `i` là giống nhau. Ta gọi trạng thái này là <strong>P2</strong>.
+                    </div>
+
+                    <span class="text-green-600 font-bold">{ P2: Mọi k &le; i, list_a[k] == list_b[k] }</span><br><br>
+                    
+                    lowest = list_a[i];<br><br>
+
+                    <div class="math-implied border-l-rose-500 text-rose-700 bg-rose-50">
+                        <strong>Luật Gán (Tính ngược):</strong> Dựa vào trạng thái P1 ở dưới, thay `lowest` bằng `list_a[i]`, ta được <code>list_a[i] == list_a[i] &and; (Mọi k &le; i, list_a[k]...)</code>.<br>
+                        Vì <code>list_a[i] == list_a[i]</code> luôn đúng, nó bị triệt tiêu. Phần còn lại khớp y hệt <strong>P2</strong> ở trên!
+                    </div>
+
+                    <span class="text-green-600 font-bold">{ P1: lowest == list_a[i] &and; (Mọi k &le; i, list_a[k] == list_b[k]) }</span><br><br>
+                    
+                    i++;<br><br>
+
+                    <div class="math-implied border-l-rose-500 text-rose-700 bg-rose-50">
+                        <strong>Luật Gán (Tính ngược):</strong> Lấy Hậu điều kiện <strong>{ I }</strong> ở tuốt dưới cùng, thay mọi chữ <code>i</code> thành <code>(i+1)</code>.<br>
+                        <code>lowest == list_a[(i+1)-1]</code> => Trở thành <code>lowest == list_a[i]</code><br>
+                        <code>Mọi k < (i+1)</code> => Trở thành <code>Mọi k &le; i</code><br>
+                        => Ghép lại, nó khớp chính xác 100% với trạng thái <strong>P1</strong> ở trên!
+                    </div>
+                </div>
+
+                <div class="hoare-post text-indigo-900 bg-indigo-100 border-t border-indigo-200">
+                    <span class="text-slate-500">// CUỐI VÒNG LẶP (Đã bảo toàn thành công Bất biến)</span><br>
+                    { I: lowest == list_a[i-1] &and; (Mọi k < i, list_a[k] == list_b[k]) }
+                </div>
+            </div>
+
+            <h3 class="font-bold text-slate-700 mb-3 mt-8">Bước 3: Thoát vòng lặp & Kết luận</h3>
+            <div class="hoare-block code-font text-sm border-indigo-200">
+                <div class="hoare-pre">{ I &and; (i &ge; size_a &or; i &ge; size_b &or; list_a[i] != list_b[i]) }</div>
+                <div class="hoare-code">
+                    <div class="math-implied">
+                        <strong>Implied:</strong> Do Bất biến I bảo đảm mọi phần tử trước i giống nhau, nên khi vòng lặp dừng lại (nghĩa là 2 nhánh bắt đầu rẽ hướng hoặc đã chạm đích), phần tử chung cuối cùng chính là (i-1). Mà lowest hiện đang lưu list_a[i-1]. Suy ra lowest là LCA.
+                    </div>
+                </div>
+                <div class="hoare-post">{ lowest == LCA }</div>
+            </div>
+        </section>
+        
+        <div class="text-center text-slate-500 text-sm mt-8 pb-8">
+            <p>Trang web này bao hàm đầy đủ từ Khái niệm Hoare Triple, Luật Gán, Luật Hệ Quả cho tới phân tích Block.</p>
+        </div>
+
+    </main>
+
+</body>
+</html>
