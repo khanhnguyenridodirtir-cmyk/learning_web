@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ Đồ Tư Duy Ngữ Pháp - Tính Từ & Trạng Từ</title>
+    <title>Sơ Đồ Tư Duy Ngữ Pháp Pro - Adjectives & Adverbs</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,123 +15,126 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Babel (để biên dịch JSX ngay trên trình duyệt) -->
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* Tinh chỉnh scrollbar cho đẹp */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        body { background-color: #f8fafc; }
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .node-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useMemo } = React;
 
-        // --- HỆ THỐNG DỮ LIỆU CỐT LÕI (BẢN CHẤT & QUY LUẬT) ---
+        // --- HỆ THỐNG DỮ LIỆU NÂNG CẤP (CHUYÊN SÂU) ---
         const tagsData = [
           '#tất-cả', 
-          '#ngoại-lệ', 
-          '#vị-trí-linh-hoạt', 
-          '#đầu/cuối-câu', 
-          '#trước-danh-từ', 
-          '#trước-tính/trạng-từ', 
-          '#sau-động-từ', 
-          '#biến-đổi-hình-thái', 
-          '#chỉ-mức-độ', 
-          '#cấu-trúc-câu'
+          '#ngoại-lệ-cực-hạn', 
+          '#vị-trí-ưu-tiên', 
+          '#trật-tự-tính-từ', 
+          '#bẫy-đuôi-ly', 
+          '#nhấn-mạnh', 
+          '#liên-kết-logic',
+          '#biến-đổi-nghĩa'
         ];
 
         const grammarData = {
           adjectives: [
             {
               id: 'adj_desc',
-              title: 'Tính từ Miêu tả (Descriptive)',
-              icon: <i className="fa-solid fa-book-open text-[18px]"></i>,
-              nature: 'Bản chất tĩnh. Định hình tính chất, hình dáng, màu sắc. Có thể biến đổi hình thái (thêm -er, -est) trong cấu trúc so sánh.',
-              rules: 'Đứng TRƯỚC danh từ để bổ nghĩa trực tiếp, hoặc đứng SAU động từ liên kết (tobe, seem, feel, look...) để miêu tả chủ ngữ.',
-              tags: ['#trước-danh-từ', '#sau-động-từ', '#biến-đổi-hình-thái'],
-              examples: ['A *beautiful* painting.', 'The soup smells *delicious*.'],
-              relations: ['Sinh ra Trạng từ Thể cách bằng cách thêm đuôi "-ly".'],
+              title: 'Tính từ Miêu tả & Trật tự OSASCOMP',
+              icon: <i className="fa-solid fa-sort-amount-down text-[18px]"></i>,
+              nature: 'Bản chất định danh tính chất. Khi nhiều tính từ cùng bổ nghĩa cho 1 danh từ, phải tuân theo trật tự logic não bộ (Ý kiến -> Kích thước -> Tuổi -> Hình dạng -> Màu sắc -> Nguồn gốc -> Chất liệu -> Mục đích).',
+              rules: 'Vị trí: Opinion - Size - Age - Shape - Color - Origin - Material - Purpose. Nếu sai trật tự này, câu sẽ mất tự nhiên.',
+              tags: ['#trật-tự-tính-từ', '#vị-trí-ưu-tiên'],
+              examples: ['A *beautiful* (Op) *small* (Size) *old* (Age) *round* (Shape) *blue* (Color) *French* (Origin) *wooden* (Material) *fishing* (Purpose) boat.'],
+              relations: ['Sinh ra Adverb of Manner. Lưu ý các tính từ có đuôi -ly sẵn như friendly, lovely, silly -> Không thể thêm -ly nữa mà phải dùng cấu trúc "In a ... way".'],
               color: 'bg-blue-50 border-blue-200 text-blue-900',
               tagColor: 'bg-blue-100 text-blue-700'
             },
             {
-              id: 'adj_quant',
-              title: 'Tính từ Định lượng (Quantitative)',
-              icon: <i className="fa-solid fa-layer-group text-[18px]"></i>,
-              nature: 'Bản chất đo lường. Xác định số lượng, dung lượng của danh từ mà không cần số đếm chính xác, thể hiện mức độ nhiều/ít.',
-              rules: 'Luôn đứng TRƯỚC danh từ. Quyết định chặt chẽ đến cấu trúc câu (buộc động từ theo sau chia số ít hay số nhiều).',
-              tags: ['#trước-danh-từ', '#chỉ-mức-độ', '#cấu-trúc-câu'],
-              examples: ['*Many* people', '*Much* water', '*Several* options'],
-              relations: ['Có sự tương đồng với Trạng từ Mức độ về mặt ý nghĩa đo lường.'],
+              id: 'adj_limit',
+              title: 'Tính từ Chỉ định & Sở hữu',
+              icon: <i className="fa-solid fa-fingerprint text-[18px]"></i>,
+              nature: 'Bản chất giới hạn phạm vi. Xác định chính xác đối tượng đang được nhắc tới (this, that, my, your, each, every).',
+              rules: 'Luôn đứng đầu tiên trong cụm danh từ, đứng trước cả tính từ miêu tả. Không bao giờ đứng sau danh từ.',
+              tags: ['#vị-trí-ưu-tiên', '#liên-kết-logic'],
+              examples: ['*This* expensive car.', '*Every* single student.'],
+              relations: ['Đóng vai trò nền tảng để xác định danh từ trước khi các bổ ngữ khác can thiệp.'],
               color: 'bg-indigo-50 border-indigo-200 text-indigo-900',
               tagColor: 'bg-indigo-100 text-indigo-700'
             },
             {
-              id: 'adj_irreg',
-              title: 'Tính từ Ngoại lệ (Irregular)',
-              icon: <i className="fa-solid fa-bolt text-[18px]"></i>,
-              nature: 'Phá vỡ quy tắc hình thái thông thường. Không thay đổi dạng (fast, hard) hoặc biến đổi hoàn toàn (good -> well) khi chuyển từ.',
-              rules: 'Vị trí rất linh hoạt tùy ngữ cảnh. Cần phân tích vị trí cấu trúc trong câu để biết nó đang đóng vai trò Tính từ hay Trạng từ.',
-              tags: ['#ngoại-lệ', '#vị-trí-linh-hoạt', '#biến-đổi-hình-thái'],
-              examples: ['*Good* (adj) -> Well (adv)', '*Fast* (adj) -> Fast (adv)', '*Hard* (adj) -> Hard (adv)'],
-              relations: ['Là điểm giao thoa phức tạp nhất giữa Tính từ và Trạng từ.'],
+              id: 'adj_confusing',
+              title: 'Tính từ Gây nhiễu (Bẫy Ngữ Pháp)',
+              icon: <i className="fa-solid fa-triangle-exclamation text-[18px]"></i>,
+              nature: 'Các cặp tính từ đuôi -ed (cảm xúc chủ thể) và -ing (tính chất vật thể/nguyên nhân). Và các tính từ trông giống trạng từ.',
+              rules: 'Phân biệt: "I am bored" (Tôi thấy chán) vs "The movie is boring" (Phim gây chán). Tránh nhầm lẫn các từ như: costly, cowardly, deadly (đều là Adj dù có đuôi -ly).',
+              tags: ['#ngoại-lệ-cực-hạn', '#bẫy-đuôi-ly'],
+              examples: ['A *deadly* weapon (Adj).', 'She felt *confused* (Adj-ed) because the map was *confusing* (Adj-ing).'],
+              relations: ['Đây là khu vực học sinh dễ mất điểm nhất trong các bài thi trắc nghiệm.'],
               color: 'bg-rose-50 border-rose-200 text-rose-900',
               tagColor: 'bg-rose-100 text-rose-700'
             }
           ],
           adverbs: [
             {
-              id: 'adv_manner',
-              title: 'Trạng từ Thể cách (Manner)',
-              icon: <i className="fa-solid fa-person-running text-[18px]"></i>,
-              nature: 'Bản chất động. Mô tả chi tiết CÁCH THỨC một hành động diễn ra (nhanh, chậm, cẩn thận...). Thường mang hậu tố -ly.',
-              rules: 'Đứng SAU động từ thường hoặc sau tân ngữ. Đặc biệt lưu ý cấu trúc: Không bao giờ đứng xen giữa động từ và tân ngữ trực tiếp.',
-              tags: ['#sau-động-từ', '#biến-đổi-hình-thái', '#cấu-trúc-câu'],
-              examples: ['She sings *beautifully*.', 'He drives the car *carefully*.'],
-              relations: ['Hầu hết được hình thành từ Tính từ Miêu tả + hậu tố "-ly".'],
+              id: 'adv_manner_pro',
+              title: 'Trạng từ Thể cách & Biến đổi Nghĩa',
+              icon: <i className="fa-solid fa-wand-magic-sparkles text-[18px]"></i>,
+              nature: 'Mô tả cách thức. Đặc biệt: Một số từ khi thêm -ly sẽ đổi hoàn toàn ý nghĩa nguyên bản.',
+              rules: 'Hard (chăm chỉ) -> Hardly (hầu như không). Late (muộn) -> Lately (gần đây). High (vị trí cao) -> Highly (rất, với sự tôn trọng).',
+              tags: ['#biến-đổi-nghĩa', '#ngoại-lệ-cực-hạn'],
+              examples: ['He works *hard* (chăm chỉ).', 'He can *hardly* work (hầu như không thể làm việc).', 'I have seen her *lately* (gần đây).'],
+              relations: ['Bản chất là trạng từ nhưng chức năng chuyển dịch sang trạng từ chỉ tần suất hoặc mức độ.'],
               color: 'bg-emerald-50 border-emerald-200 text-emerald-900',
               tagColor: 'bg-emerald-100 text-emerald-700'
             },
             {
-              id: 'adv_freq',
-              title: 'Trạng từ Tần suất (Frequency)',
-              icon: <i className="fa-solid fa-clock-rotate-left text-[18px]"></i>,
-              nature: 'Bản chất chu kỳ. Xác định mức độ lặp lại của hành động (luôn luôn, thỉnh thoảng, không bao giờ...).',
-              rules: 'Vị trí rất linh hoạt nhưng có quy tắc: Đứng TRƯỚC động từ thường, nhưng đứng SAU động từ tobe / trợ động từ.',
-              tags: ['#vị-trí-linh-hoạt', '#sau-động-từ', '#cấu-trúc-câu'],
-              examples: ['I *always* wake up early.', 'She is *never* late.'],
-              relations: ['Bổ sung ý nghĩa thời gian vi mô cho động từ.'],
+              id: 'adv_place_time',
+              title: 'Trạng từ Nơi chốn & Thời gian',
+              icon: <i className="fa-solid fa-map-location-dot text-[18px]"></i>,
+              nature: 'Bản chất bối cảnh. Trả lời cho câu hỏi Where? và When?. Quy định khung thời không cho hành động.',
+              rules: 'Thứ tự ưu tiên cuối câu: [Nơi chốn] trước -> [Thời gian] sau. Nếu thời gian nhấn mạnh, có thể đưa lên đầu câu.',
+              tags: ['#vị-trí-ưu-tiên', '#liên-kết-logic'],
+              examples: ['I will meet you *there* (Place) *tomorrow* (Time).', '*Yesterday*, everything seemed fine.'],
+              relations: ['Thường đi kèm với các giới từ để tạo thành cụm trạng ngữ.'],
               color: 'bg-teal-50 border-teal-200 text-teal-900',
               tagColor: 'bg-teal-100 text-teal-700'
             },
             {
-              id: 'adv_degree',
-              title: 'Trạng từ Mức độ (Degree)',
-              icon: <i className="fa-solid fa-temperature-arrow-up text-[18px]"></i>,
-              nature: 'Bản chất khuếch đại/thu hẹp. Dùng để tăng giảm sắc thái, giới hạn mức độ của một tính chất hoặc hành động.',
-              rules: 'Thường đứng ngay TRƯỚC Tính từ hoặc Trạng từ khác để bổ nghĩa cho chúng. Tác động mạnh đến cấu trúc nhấn mạnh của câu.',
-              tags: ['#chỉ-mức-độ', '#trước-tính/trạng-từ', '#cấu-trúc-câu'],
-              examples: ['The water is *extremely* cold.', 'He runs *very* fast.'],
-              relations: ['Kẻ "nâng đỡ" cho Tính từ và các Trạng từ khác, tạo ra chiều sâu cho câu.'],
+              id: 'adv_degree_intensifier',
+              title: 'Trạng từ Mức độ & Từ Nhấn mạnh',
+              icon: <i className="fa-solid fa-gauge-high text-[18px]"></i>,
+              nature: 'Bản chất năng lượng. Điều chỉnh "âm lượng" của tính từ và trạng từ khác. Bao gồm cả các từ giảm nhẹ (slightly, quite).',
+              rules: 'Đặc biệt: "Enough" đứng SAU tính từ (Good enough), nhưng các trạng từ khác luôn đứng TRƯỚC (Very good).',
+              tags: ['#nhấn-mạnh', '#vị-trí-ưu-tiên'],
+              examples: ['It is *fairly* hot.', 'You are not tall *enough*.'],
+              relations: ['Tương tác trực tiếp với Khối Tính Từ Miêu Tả.'],
               color: 'bg-cyan-50 border-cyan-200 text-cyan-900',
               tagColor: 'bg-cyan-100 text-cyan-700'
             },
             {
-              id: 'adv_sentence',
-              title: 'Trạng từ Liên kết / Toàn câu (Sentence)',
-              icon: <i className="fa-solid fa-comment-dots text-[18px]"></i>,
-              nature: 'Bản chất thái độ/logic. Thể hiện quan điểm của người nói về toàn bộ sự việc hoặc nối logic giữa các câu.',
-              rules: 'Vị trí rất linh hoạt, nhưng phổ biến nhất là đứng ĐẦU CÂU hoặc CUỐI CÂU, ngăn cách với mệnh đề chính bằng dấu phẩy (,).',
-              tags: ['#đầu/cuối-câu', '#vị-trí-linh-hoạt', '#cấu-trúc-câu'],
-              examples: ['*Fortunately*, we arrived in time.', 'The weather was bad, *however*.'],
-              relations: ['Nằm ngoài cấu trúc ngữ pháp nòng cốt của câu, đóng vai trò như người dẫn chuyện.'],
+              id: 'adv_comment',
+              title: 'Trạng từ Quan điểm (Comment Adverbs)',
+              icon: <i className="fa-solid fa-bullhorn text-[18px]"></i>,
+              nature: 'Bản chất cảm xúc người nói. Nhận xét về toàn bộ nội dung câu (Surprisingly, Honestly, Clearly).',
+              rules: 'Luôn đứng tách biệt bằng dấu phẩy. Thể hiện thái độ của chủ thể nói trước khi đưa ra thông tin.',
+              tags: ['#nhấn-mạnh', '#liên-kết-logic'],
+              examples: ['*Honestly*, I don\'t know.', '*Surprisingly*, he won the race.'],
+              relations: ['Giống như một "vỏ bọc" cảm xúc cho cả mệnh đề.'],
               color: 'bg-green-50 border-green-200 text-green-900',
               tagColor: 'bg-green-100 text-green-700'
             }
@@ -141,94 +144,88 @@
         // --- COMPONENT: SƠ ĐỒ TƯ DUY (MINDMAP) ---
         const MindmapView = ({ onNodeClick }) => {
           return (
-            // Wrapper overflow-x-auto giúp tránh lỗi chồng chéo khi thu nhỏ màn hình
-            <div className="w-full overflow-x-auto bg-slate-50 rounded-2xl border border-slate-200 shadow-inner">
-              <div className="relative w-[1000px] h-[600px] mx-auto">
-                {/* Background Grid */}
-                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
-                
-                {/* SVG Connecting Lines - Đã thiết lập viewBox và tọa độ pixel */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 600">
-                  {/* Định nghĩa các đầu mũi tên (Arrowheads) */}
+            <div className="w-full overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-xl p-4">
+              <div className="relative min-w-[1000px] h-[650px] mx-auto">
+                {/* SVG Connections */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 650">
                   <defs>
-                    <marker id="arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#94a3b8" />
+                    <marker id="arrow-main" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#64748b" />
                     </marker>
-                    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#bfdbfe" />
-                    </marker>
-                    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#a7f3d0" />
-                    </marker>
-                    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b" />
-                    </marker>
+                    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{stopColor:'#3b82f6', stopOpacity:1}} />
+                      <stop offset="100%" style={{stopColor:'#6366f1', stopOpacity:1}} />
+                    </linearGradient>
                   </defs>
 
-                  {/* Lines from Root */}
-                  <path d="M 500 126 Q 300 150 250 234" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" markerEnd="url(#arrow-slate)" />
-                  <path d="M 500 126 Q 700 150 750 234" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" markerEnd="url(#arrow-slate)" />
-                  
-                  {/* Adjectives Lines */}
-                  <path d="M 230 306 L 150 426" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
-                  <path d="M 250 306 L 270 456" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
-                  <path d="M 270 306 L 390 426" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
+                  {/* Root to Branches */}
+                  <path d="M 500 100 L 250 220" stroke="#cbd5e1" strokeWidth="2" fill="none" markerEnd="url(#arrow-main)" />
+                  <path d="M 500 100 L 750 220" stroke="#cbd5e1" strokeWidth="2" fill="none" markerEnd="url(#arrow-main)" />
 
-                  {/* Adverbs Lines */}
-                  <path d="M 730 306 L 600 426" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
-                  <path d="M 740 306 L 700 486" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
-                  <path d="M 760 306 L 800 486" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
-                  <path d="M 770 306 L 900 426" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
+                  {/* Sub-branches Adjectives */}
+                  <path d="M 250 280 L 150 400" stroke="#bfdbfe" strokeWidth="2" fill="none" />
+                  <path d="M 250 280 L 250 430" stroke="#bfdbfe" strokeWidth="2" fill="none" />
+                  <path d="M 250 280 L 350 400" stroke="#bfdbfe" strokeWidth="2" fill="none" />
 
-                  {/* Cross Relationships */}
-                  {/* 1. Miêu tả (150, 450) -> Thể cách (600, 450) */}
-                  <path d="M 180 450 Q 375 360 560 450" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" markerEnd="url(#arrow-amber)" />
-                  <text x="375" y="384" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Thêm đuôi "-ly"</text>
-                  
-                  {/* 2. Định lượng (270, 480) -> Mức độ (800, 510) */}
-                  <path d="M 320 480 Q 535 570 750 510" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" markerEnd="url(#arrow-amber)" />
-                  <text x="535" y="540" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Cùng bổ nghĩa mức độ</text>
+                  {/* Sub-branches Adverbs */}
+                  <path d="M 750 280 L 600 400" stroke="#a7f3d0" strokeWidth="2" fill="none" />
+                  <path d="M 750 280 L 700 450" stroke="#a7f3d0" strokeWidth="2" fill="none" />
+                  <path d="M 750 280 L 800 450" stroke="#a7f3d0" strokeWidth="2" fill="none" />
+                  <path d="M 750 280 L 900 400" stroke="#a7f3d0" strokeWidth="2" fill="none" />
+
+                  {/* Complex Links (Dashed) */}
+                  <path d="M 150 430 Q 500 550 850 430" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6,4" fill="none" opacity="0.4" />
+                  <text x="500" y="530" fill="#d97706" fontSize="12" textAnchor="middle" fontWeight="bold">Tương tác OSASCOMP & Vị trí Ưu tiên</text>
                 </svg>
 
-                {/* Nodes */}
-                <div className="absolute top-[15%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10">
-                  <div className="bg-slate-800 text-white px-6 py-3 rounded-xl shadow-lg font-bold text-lg border-4 border-slate-700 hover:scale-105 transition-transform cursor-default text-center">
-                    MODIFIERS <br/><span className="text-sm font-normal text-slate-300">(Từ Bổ Nghĩa)</span>
+                {/* Root Node */}
+                <div className="absolute top-[50px] left-1/2 -translate-x-1/2 z-20">
+                  <div className="bg-slate-900 text-white px-8 py-4 rounded-2xl shadow-2xl border-4 border-slate-700 text-center">
+                    <div className="text-xs uppercase tracking-widest text-slate-400 mb-1 font-bold">The Core of</div>
+                    <div className="text-2xl font-black">ENGLISH MODIFIERS</div>
                   </div>
                 </div>
 
-                <div className="absolute top-[45%] left-[25%] transform -translate-x-1/2 -translate-y-1/2 z-10">
-                  <div className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-blue-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adj_desc')}>
-                    TÍNH TỪ (Adjectives) <br/><span className="text-xs font-normal text-blue-100">Bản chất Tĩnh</span>
-                  </div>
-                </div>
-                <div className="absolute top-[45%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 z-10">
-                  <div className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-emerald-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adv_manner')}>
-                    TRẠNG TỪ (Adverbs) <br/><span className="text-xs font-normal text-emerald-100">Bản chất Động</span>
-                  </div>
+                {/* Major Categories */}
+                <div className="absolute top-[220px] left-[25%] -translate-x-1/2 z-20">
+                  <button onClick={() => onNodeClick('adj_desc')} className="group relative bg-blue-600 text-white p-6 rounded-xl shadow-xl hover:scale-105 transition-all duration-300 border-b-4 border-blue-800">
+                    <div className="absolute -top-3 -right-3 bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-1 rounded-full uppercase">Static</div>
+                    <i className="fa-solid fa-shapes text-2xl mb-2 block"></i>
+                    <span className="font-bold text-lg">ADJECTIVES</span>
+                  </button>
                 </div>
 
-                <div className="absolute top-[75%] left-[15%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_desc')}>
-                  <div className="bg-white text-blue-800 px-3 py-2 rounded shadow text-sm font-semibold border border-blue-200">Miêu tả</div>
-                </div>
-                <div className="absolute top-[80%] left-[27%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_quant')}>
-                  <div className="bg-white text-indigo-800 px-3 py-2 rounded shadow text-sm font-semibold border border-indigo-200">Định lượng</div>
-                </div>
-                <div className="absolute top-[75%] left-[39%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_irreg')}>
-                  <div className="bg-white text-rose-800 px-3 py-2 rounded shadow text-sm font-semibold border border-rose-200 shadow-rose-200">Ngoại lệ</div>
+                <div className="absolute top-[220px] left-[75%] -translate-x-1/2 z-20">
+                  <button onClick={() => onNodeClick('adv_manner_pro')} className="group relative bg-emerald-600 text-white p-6 rounded-xl shadow-xl hover:scale-105 transition-all duration-300 border-b-4 border-emerald-800">
+                    <div className="absolute -top-3 -right-3 bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-1 rounded-full uppercase">Dynamic</div>
+                    <i className="fa-solid fa-person-running text-2xl mb-2 block"></i>
+                    <span className="font-bold text-lg">ADVERBS</span>
+                  </button>
                 </div>
 
-                <div className="absolute top-[75%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_manner')}>
-                  <div className="bg-white text-emerald-800 px-3 py-2 rounded shadow text-sm font-semibold border border-emerald-200">Thể cách</div>
+                {/* Adjectives Sub-nodes */}
+                <div className="absolute top-[415px] left-[15%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adj_desc')}>
+                    <div className="bg-white border-2 border-blue-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-blue-700 text-sm w-32">Miêu tả & OSASCOMP</div>
                 </div>
-                <div className="absolute top-[85%] left-[70%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_freq')}>
-                  <div className="bg-white text-teal-800 px-3 py-2 rounded shadow text-sm font-semibold border border-teal-200">Tần suất</div>
+                <div className="absolute top-[445px] left-[25%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adj_limit')}>
+                    <div className="bg-white border-2 border-indigo-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-indigo-700 text-sm w-32">Chỉ định & Sở hữu</div>
                 </div>
-                <div className="absolute top-[85%] left-[80%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_degree')}>
-                  <div className="bg-white text-cyan-800 px-3 py-2 rounded shadow text-sm font-semibold border border-cyan-200">Mức độ</div>
+                <div className="absolute top-[415px] left-[35%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adj_confusing')}>
+                    <div className="bg-white border-2 border-rose-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-rose-700 text-sm w-32">Bẫy Adj -ed/-ing</div>
                 </div>
-                <div className="absolute top-[75%] left-[90%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_sentence')}>
-                  <div className="bg-white text-green-800 px-3 py-2 rounded shadow text-sm font-semibold border border-green-200">Toàn câu</div>
+
+                {/* Adverbs Sub-nodes */}
+                <div className="absolute top-[415px] left-[60%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adv_manner_pro')}>
+                    <div className="bg-white border-2 border-emerald-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-emerald-700 text-sm w-32">Thể cách & Nghĩa ẩn</div>
+                </div>
+                <div className="absolute top-[465px] left-[70%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adv_place_time')}>
+                    <div className="bg-white border-2 border-teal-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-teal-700 text-sm w-32">Nơi chốn / Thời gian</div>
+                </div>
+                <div className="absolute top-[465px] left-[80%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adv_degree_intensifier')}>
+                    <div className="bg-white border-2 border-cyan-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-cyan-700 text-sm w-32">Mức độ & Enough</div>
+                </div>
+                <div className="absolute top-[415px] left-[90%] -translate-x-1/2 cursor-pointer" onClick={() => onNodeClick('adv_comment')}>
+                    <div className="bg-white border-2 border-green-200 p-3 rounded-lg shadow-sm hover:shadow-md text-center font-bold text-green-700 text-sm w-32">Quan điểm toàn câu</div>
                 </div>
               </div>
             </div>
@@ -240,219 +237,200 @@
           const [activeTab, setActiveTab] = useState('mindmap');
           const [activeTag, setActiveTag] = useState('#tất-cả');
           const [selectedItem, setSelectedItem] = useState(null);
-          const [animateState, setAnimateState] = useState(false);
 
-          useEffect(() => {
-            setAnimateState(true);
-            const timer = setTimeout(() => setAnimateState(false), 300);
-            return () => clearTimeout(timer);
-          }, [activeTab, activeTag]);
+          const filteredAdjectives = useMemo(() => {
+            if (activeTag === '#tất-cả') return grammarData.adjectives;
+            return grammarData.adjectives.filter(i => i.tags.includes(activeTag));
+          }, [activeTag]);
 
-          const handleOpenDetail = (id) => {
-            const item = grammarData.adjectives.find(i => i.id === id) || grammarData.adverbs.find(i => i.id === id);
+          const filteredAdverbs = useMemo(() => {
+            if (activeTag === '#tất-cả') return grammarData.adverbs;
+            return grammarData.adverbs.filter(i => i.tags.includes(activeTag));
+          }, [activeTag]);
+
+          const handleNodeClick = (id) => {
+            const allItems = [...grammarData.adjectives, ...grammarData.adverbs];
+            const item = allItems.find(i => i.id === id);
             if (item) setSelectedItem(item);
-          };
-
-          const filterItems = (items) => {
-            if (activeTag === '#tất-cả') return items;
-            return items.filter(item => item.tags.includes(activeTag));
           };
 
           const renderCard = (item) => (
             <div 
               key={item.id} 
-              onClick={() => handleOpenDetail(item.id)}
-              className={`relative p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${item.color}`}
+              onClick={() => setSelectedItem(item)}
+              className={`group p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full ${item.color}`}
             >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="bg-white p-2 rounded-full shadow-sm w-8 h-8 flex items-center justify-center">{item.icon}</div>
-                <h3 className="font-bold text-lg">{item.title}</h3>
+              <div className="flex justify-between items-start mb-4">
+                <div className="bg-white p-3 rounded-xl shadow-sm text-xl">{item.icon}</div>
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                  <i className="fa-solid fa-circle-plus text-lg"></i>
+                </div>
               </div>
-              <p className="text-sm opacity-90 line-clamp-2 mb-4">{item.nature}</p>
-              
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {item.tags.map(tag => (
-                  <span key={tag} className={`text-xs px-2 py-1 rounded-full font-medium ${item.tagColor}`}>
-                    {tag}
+              <h3 className="font-black text-xl mb-2 leading-tight">{item.title}</h3>
+              <p className="text-sm opacity-80 mb-6 flex-grow">{item.nature}</p>
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-black/5">
+                {item.tags.map(t => (
+                  <span key={t} className={`text-[10px] font-black uppercase tracking-tighter px-2 py-1 rounded ${item.tagColor}`}>
+                    {t}
                   </span>
                 ))}
-              </div>
-              <div className="absolute top-4 right-4 opacity-0 hover:opacity-100 transition-opacity">
-                <i className="fa-solid fa-arrow-right text-current opacity-50 text-[20px]"></i>
               </div>
             </div>
           );
 
           return (
-            <div className="min-h-screen text-slate-800 font-sans p-4 md:p-8">
-              <div className="max-w-6xl mx-auto space-y-6">
-                
-                {/* HEADER & NAVIGATION */}
-                <header className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                  <div>
-                    <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 flex items-center gap-3">
-                      <i className="fa-solid fa-project-diagram text-blue-600 text-[32px]"></i>
-                      Bản Đồ Ngữ Pháp Động
-                    </h1>
-                    <p className="text-slate-500 mt-1 font-medium">Khám phá Bản chất & Mối quan hệ giữa Tính từ - Trạng từ</p>
+            <div className="min-h-screen pb-20">
+              {/* Top Navigation Bar */}
+              <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200">
+                <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-slate-900 text-white w-10 h-10 rounded-lg flex items-center justify-center font-black shadow-lg">G</div>
+                    <div>
+                      <h1 className="font-black text-xl tracking-tight text-slate-900">GrammarPro <span className="text-blue-600">v2.0</span></h1>
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Modifier Masterclass</div>
+                    </div>
                   </div>
                   
-                  <div className="flex bg-slate-100 p-1 rounded-xl">
-                    {['mindmap', 'adjectives', 'adverbs'].map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${
-                          activeTab === tab 
-                            ? 'bg-white text-slate-900 shadow-sm' 
-                            : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
-                        }`}
+                  <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+                    {[
+                      {id:'mindmap', label:'Sơ Đồ'},
+                      {id:'adjectives', label:'Tính Từ'},
+                      {id:'adverbs', label:'Trạng Từ'}
+                    ].map(tab => (
+                      <button 
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === tab.id ? 'bg-white text-slate-900 shadow-md' : 'text-slate-500 hover:text-slate-700'}`}
                       >
-                        {tab === 'mindmap' ? 'Sơ đồ Tư duy' : tab === 'adjectives' ? 'Khối Tính Từ' : 'Khối Trạng Từ'}
+                        {tab.label}
                       </button>
                     ))}
                   </div>
-                </header>
+                </div>
+              </nav>
 
-                {/* MAIN CONTENT AREA */}
-                <main className={`transition-all duration-300 ${animateState ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-                  
+              <div className="max-w-7xl mx-auto px-4 mt-8">
+                {/* Tag Cloud */}
+                <div className="flex items-center gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
+                  <div className="shrink-0 flex items-center gap-2 text-slate-400 font-black text-xs uppercase tracking-widest pr-4 border-r border-slate-200">
+                    <i className="fa-solid fa-filter"></i> Lọc Nâng Cao
+                  </div>
+                  {tagsData.map(tag => (
+                    <button 
+                      key={tag}
+                      onClick={() => setActiveTag(tag)}
+                      className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all border-2 ${activeTag === tag ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400'}`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Content Sections */}
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                   {activeTab === 'mindmap' && (
-                    <div className="space-y-4">
-                      <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm border border-blue-200 flex items-start gap-3">
-                        <i className="fa-solid fa-circle-info shrink-0 mt-1 text-blue-600 text-[20px]"></i>
-                        <p><strong>Hướng dẫn tương tác:</strong> Sơ đồ thể hiện hệ sinh thái của các "Từ bổ nghĩa". Bạn có thể thấy Tính từ và Trạng từ không tồn tại độc lập mà có sự chuyển hóa lẫn nhau (đường nét đứt màu cam). <br/>👉 <strong>Click vào các nút (nodes)</strong> trên sơ đồ để xem bản chất chi tiết của từng phân loại.</p>
+                    <div className="space-y-6">
+                      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden">
+                        <div className="relative z-10">
+                          <h2 className="text-3xl font-black mb-2">Bản Đồ Hệ Sinh Thái Modifiers</h2>
+                          <p className="opacity-80 max-w-2xl font-medium">Khám phá cách tính từ và trạng từ vận hành. Click vào các Node để xem quy luật "vàng" giúp bạn làm chủ 90% các bài thi ngữ pháp nâng cao.</p>
+                        </div>
+                        <i className="fa-solid fa-microchip absolute -right-10 -bottom-10 text-[200px] opacity-10 rotate-12"></i>
                       </div>
-                      <MindmapView onNodeClick={handleOpenDetail} />
+                      <MindmapView onNodeClick={handleNodeClick} />
                     </div>
                   )}
 
-                  {(activeTab === 'adjectives' || activeTab === 'adverbs') && (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                      <div className="flex flex-col md:flex-row items-center gap-4 mb-8 pb-6 border-b border-slate-100">
-                        <div className="flex items-center gap-2 text-slate-500 font-medium">
-                          <i className="fa-solid fa-tags text-[18px]"></i>
-                          <span>Hệ thống nhãn phân loại (Tags):</span>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {tagsData.map(tag => (
-                            <button
-                              key={tag}
-                              onClick={() => setActiveTag(tag)}
-                              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                                activeTag === tag 
-                                  ? 'bg-slate-800 text-white' 
-                                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                              }`}
-                            >
-                              {tag}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                          {activeTab === 'adjectives' ? (
-                            <><i className="fa-solid fa-book-open text-blue-500"></i> Phân loại Tính từ (Adjectives)</>
-                          ) : (
-                            <><i className="fa-solid fa-chart-line text-emerald-500"></i> Phân loại Trạng từ (Adverbs)</>
-                          )}
-                        </h2>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {filterItems(activeTab === 'adjectives' ? grammarData.adjectives : grammarData.adverbs).map(renderCard)}
-                        </div>
-
-                        {filterItems(activeTab === 'adjectives' ? grammarData.adjectives : grammarData.adverbs).length === 0 && (
-                          <div className="text-center py-12 text-slate-400">
-                            <i className="fa-solid fa-magnifying-glass text-[48px] mx-auto mb-4 opacity-20 block"></i>
-                            <p>Không có dữ liệu nào khớp với nhãn <strong>{activeTag}</strong> trong mục này.</p>
-                            <p className="text-sm mt-2">Thử chuyển sang thẻ khác hoặc chọn nhãn #tất-cả.</p>
-                          </div>
-                        )}
-                      </div>
+                  {activeTab === 'adjectives' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {filteredAdjectives.map(renderCard)}
                     </div>
                   )}
-                </main>
+
+                  {activeTab === 'adverbs' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {filteredAdverbs.map(renderCard)}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* MODAL CHI TIẾT */}
+              {/* Advanced Detail Modal */}
               {selectedItem && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity">
-                  <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all">
-                    
-                    <div className={`p-6 border-b flex justify-between items-center ${selectedItem.color.split(' ')[0]}`}>
-                      <div className="flex items-center gap-3">
-                        <div className="bg-white p-2 w-10 h-10 flex items-center justify-center rounded-xl shadow-sm">{selectedItem.icon}</div>
-                        <h2 className={`text-2xl font-bold ${selectedItem.color.split(' ').pop()}`}>{selectedItem.title}</h2>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                  <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setSelectedItem(null)}></div>
+                  <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl relative z-10 animate-in zoom-in-95 duration-200 flex flex-col md:flex-row max-h-[90vh]">
+                    {/* Modal Sidebar */}
+                    <div className={`md:w-1/3 p-8 flex flex-col items-center text-center justify-center border-b md:border-b-0 md:border-r border-slate-100 ${selectedItem.color}`}>
+                      <div className="bg-white p-6 rounded-2xl shadow-xl text-4xl mb-6">
+                        {selectedItem.icon}
                       </div>
-                      <button 
-                        onClick={() => setSelectedItem(null)}
-                        className="p-2 w-10 h-10 flex items-center justify-center bg-white/50 hover:bg-white rounded-full transition-colors"
-                      >
-                        <i className="fa-solid fa-xmark text-slate-600 text-[20px]"></i>
-                      </button>
-                    </div>
-
-                    <div className="p-6 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                          <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-2">
-                            <i className="fa-solid fa-bolt text-amber-500"></i> Bản chất cốt lõi
-                          </h3>
-                          <p className="text-slate-600 text-sm leading-relaxed">{selectedItem.nature}</p>
-                        </div>
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                          <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-2">
-                            <i className="fa-solid fa-book-open text-blue-500"></i> Quy luật vị trí
-                          </h3>
-                          <p className="text-slate-600 text-sm leading-relaxed">{selectedItem.rules}</p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 border-b pb-2">
-                          <i className="fa-solid fa-project-diagram text-indigo-500"></i> Mối quan hệ tương quan
-                        </h3>
-                        <ul className="space-y-2">
-                          {selectedItem.relations.map((rel, idx) => (
-                            <li key={idx} className="flex items-start gap-3 text-sm text-slate-600 bg-indigo-50/50 p-3 rounded-lg border border-indigo-100">
-                              <i className="fa-solid fa-arrow-right text-indigo-400 mt-1 shrink-0"></i>
-                              <span>{rel}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h3 className="font-bold text-slate-800 flex items-center gap-2 mb-3 border-b pb-2">
-                          <i className="fa-solid fa-chart-line text-emerald-500"></i> Ví dụ phân tích
-                        </h3>
-                        <div className="space-y-3">
-                          {selectedItem.examples.map((ex, idx) => {
-                            const parts = ex.split('*');
-                            return (
-                              <div key={idx} className="p-3 bg-white border border-slate-200 rounded-lg shadow-sm text-slate-700">
-                                {parts.map((part, i) => i % 2 !== 0 ? (
-                                  <span key={i} className={`font-bold underline decoration-2 underline-offset-4 ${selectedItem.color.split(' ').pop().replace('900', '600')}`}>
-                                    {part}
-                                  </span>
-                                ) : part)}
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="pt-4 flex flex-wrap gap-2">
-                        {selectedItem.tags.map(tag => (
-                          <span key={tag} className="text-xs px-3 py-1.5 rounded-full font-medium bg-slate-100 text-slate-600 border border-slate-200">
-                            {tag}
+                      <h2 className="text-2xl font-black mb-4 leading-tight">{selectedItem.title}</h2>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {selectedItem.tags.map(t => (
+                          <span key={t} className="bg-white/50 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-tighter">
+                            {t}
                           </span>
                         ))}
                       </div>
+                    </div>
 
+                    {/* Modal Body */}
+                    <div className="md:w-2/3 p-8 overflow-y-auto">
+                      <button 
+                        onClick={() => setSelectedItem(null)}
+                        className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+                      >
+                        <i className="fa-solid fa-xmark text-slate-500"></i>
+                      </button>
+
+                      <div className="space-y-8">
+                        <section>
+                          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-dna text-blue-500"></i> Bản chất & Nguyên lý
+                          </h4>
+                          <p className="text-slate-700 leading-relaxed font-medium">{selectedItem.nature}</p>
+                        </section>
+
+                        <section>
+                          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-gavel text-indigo-500"></i> Quy tắc vàng (Rules)
+                          </h4>
+                          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm text-slate-600 leading-relaxed italic">
+                            "{selectedItem.rules}"
+                          </div>
+                        </section>
+
+                        <section>
+                          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i className="fa-solid fa-lightbulb text-amber-500"></i> Ví dụ Phân tích Pro
+                          </h4>
+                          <div className="space-y-3">
+                            {selectedItem.examples.map((ex, i) => {
+                              const parts = ex.split('*');
+                              return (
+                                <div key={i} className="p-4 bg-white border-l-4 border-slate-900 shadow-sm text-slate-800 font-mono text-sm">
+                                  {parts.map((p, idx) => idx % 2 !== 0 ? <strong key={idx} className="text-blue-600 underline">{p}</strong> : p)}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </section>
+
+                        <section className="bg-slate-900 text-white p-6 rounded-2xl">
+                          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">
+                            Mối quan hệ Hệ sinh thái
+                          </h4>
+                          <ul className="space-y-3">
+                            {selectedItem.relations.map((r, i) => (
+                              <li key={i} className="text-sm flex gap-3 items-start">
+                                <i className="fa-solid fa-link text-blue-400 mt-1"></i>
+                                <span className="opacity-90">{r}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      </div>
                     </div>
                   </div>
                 </div>
