@@ -1,509 +1,522 @@
-import React, { useState } from 'react';
-import { 
-  Tag, PlaySquare, Compass, AlertTriangle, 
-  BookOpen, BrainCircuit, CheckCircle2, XCircle, 
-  ArrowRight, Layers, Clock, MapPin, Zap, MessageSquare 
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Làm Chủ Tính Từ & Trạng Từ</title>
+    <!-- Tải Tailwind CSS để có giao diện đẹp -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải React và "Thông dịch viên" Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-slate-50">
+    <!-- Nơi React sẽ hiển thị giao diện -->
+    <div id="root"></div>
 
-const App = () => {
-  const [activeTab, setActiveTab] = useState('banchat');
+    <script type="text/babel">
+        const { useState } = React;
 
-  const tabs = [
-    { id: 'banchat', label: 'Cội Nguồn', icon: BrainCircuit, color: 'bg-indigo-500' },
-    { id: 'phanloai', label: 'Hệ Tọa Độ', icon: Compass, color: 'bg-emerald-500' },
-    { id: 'chucnang', label: 'Khớp Nối', icon: Layers, color: 'bg-amber-500' },
-    { id: 'cambay', label: 'Cạm Bẫy', icon: AlertTriangle, color: 'bg-rose-500' },
-    { id: 'thuchanh', label: 'Thực Hành', icon: PlaySquare, color: 'bg-blue-500' },
-  ];
+        const App = () => {
+          const [activeTab, setActiveTab] = useState('banchat');
 
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-12">
-      {/* Header */}
-      <div className="bg-slate-900 text-white pt-12 pb-24 px-4 text-center rounded-b-[3rem] shadow-xl">
-        <h1 className="text-4xl md:text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-          Làm Chủ Tính Từ & Trạng Từ
-        </h1>
-        <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light">
-          Khám phá bản chất ngôn ngữ: Từ những chiếc "nhãn dán" tĩnh lặng đến "hệ tọa độ" của hành động.
-        </p>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="max-w-6xl mx-auto px-4 -mt-16">
-        {/* Navigation */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 bg-white/80 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-slate-100">
-          {tabs.map(tab => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all duration-300 ${
-                  isActive 
-                    ? `${tab.color} text-white shadow-md transform scale-105` 
-                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
-                }`}
-              >
-                <Icon size={18} />
-                <span className="hidden md:inline">{tab.label}</span>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Dynamic Content Views */}
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-10 min-h-[600px]">
-          {activeTab === 'banchat' && <BanChatView />}
-          {activeTab === 'phanloai' && <PhanLoaiView />}
-          {activeTab === 'chucnang' && <ChucNangView />}
-          {activeTab === 'cambay' && <CamBayView />}
-          {activeTab === 'thuchanh' && <ThucHanhView />}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ================= COMPONENT VIEWS ================= */
-
-// 1. GÓC NHÌN BẢN CHẤT
-const BanChatView = () => (
-  <div className="animate-fade-in space-y-8">
-    <div className="text-center mb-10">
-      <h2 className="text-3xl font-bold text-slate-800 mb-3">Triết lý: Tĩnh và Động</h2>
-      <p className="text-slate-600">Cách con người gán nhãn cho thế giới và tạo ra sự chuyển động.</p>
-    </div>
-
-    <div className="grid md:grid-cols-2 gap-8">
-      {/* Tính từ */}
-      <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl border border-indigo-100 relative overflow-hidden">
-        <Tag className="absolute -bottom-4 -right-4 text-indigo-100 w-48 h-48 transform -rotate-12" />
-        <div className="relative z-10">
-          <div className="bg-indigo-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-200">
-            <Tag size={28} />
-          </div>
-          <h3 className="text-2xl font-black text-indigo-900 mb-4">Tính từ (Adjective)</h3>
-          <p className="text-indigo-800 font-bold text-lg mb-2">Bản chất: "Chiếc nhãn dán" tĩnh.</p>
-          <p className="text-slate-700 leading-relaxed mb-4">
-            Dùng để dán lên một Danh từ (người, vật) nhằm xác định <strong>bản chất nội tại</strong> của nó khi nó đang đứng im.
-          </p>
-          <div className="bg-white/60 p-4 rounded-xl border border-indigo-200">
-            <p className="font-mono text-indigo-900">He is a <span className="font-bold text-indigo-600 bg-indigo-100 px-1 rounded">careful</span> driver.</p>
-            <p className="text-sm text-slate-600 mt-2">↳ Anh ta có bản chất là người cẩn thận.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Trạng từ */}
-      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 rounded-3xl border border-emerald-100 relative overflow-hidden">
-        <PlaySquare className="absolute -bottom-4 -right-4 text-emerald-100 w-48 h-48 transform rotate-12" />
-        <div className="relative z-10">
-          <div className="bg-emerald-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
-            <PlaySquare size={28} />
-          </div>
-          <h3 className="text-2xl font-black text-emerald-900 mb-4">Trạng từ (Adverb)</h3>
-          <p className="text-emerald-800 font-bold text-lg mb-2">Bản chất: "Tính từ của hành động".</p>
-          <p className="text-slate-700 leading-relaxed mb-4">
-            Đuôi <strong>-ly</strong> đóng vai trò như nút PLAY. Nó biến tính chất nội tại hòa tan vào nhịp điệu của một hành động.
-          </p>
-          <div className="bg-white/60 p-4 rounded-xl border border-emerald-200">
-            <p className="font-mono text-emerald-900">He drives <span className="font-bold text-emerald-600 bg-emerald-100 px-1 rounded">carefully</span>.</p>
-            <p className="text-sm text-slate-600 mt-2">↳ Sự cẩn thận nhuốm màu vào thao tác lái xe.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* Lịch sử đuôi -ly */}
-    <div className="bg-slate-900 text-slate-300 p-8 rounded-3xl mt-8 flex flex-col md:flex-row items-center gap-6">
-      <BookOpen className="text-amber-400 w-16 h-16 flex-shrink-0" />
-      <div>
-        <h4 className="text-amber-400 font-bold text-xl mb-2">Bí ẩn lịch sử: Tại sao lại là đuôi "-ly"?</h4>
-        <p className="text-sm md:text-base">
-          Trong tiếng Anh cổ, đuôi này là <strong>-lic</strong> (nghĩa là "like" - giống như). Thay vì nói "Anh ấy hành động giống-như-sự-cẩn-thận" (careful-like), qua hàng thế kỷ, chữ "like" bị đọc nuốt đi và xói mòn thành âm <strong>"-ly"</strong>. Việc thêm "-ly" là cách ngôn ngữ tái chế từ vựng cực kỳ tiết kiệm!
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
-// 2. PHÂN LOẠI (HỆ TỌA ĐỘ)
-const PhanLoaiView = () => (
-  <div className="animate-fade-in space-y-8">
-    <div className="text-center mb-10">
-      <h2 className="text-3xl font-bold text-emerald-800 mb-3">Hệ Tọa Độ Ngôn Ngữ</h2>
-      <p className="text-slate-600">Trạng từ không sinh ra từ tính từ (như now, here, very) đóng vai trò là "Metadata" (Siêu dữ liệu) thiết lập không gian, thời gian cho câu.</p>
-    </div>
-
-    <div className="grid md:grid-cols-3 gap-4">
-      <CoordCard 
-        icon={<Zap className="text-orange-500" />}
-        title="Cách thức (Manner)"
-        desc="Trả lời câu hỏi: Như thế nào?"
-        examples={["carefully", "fast", "straight", "loudly"]}
-        note="Thường sinh ra từ Tính từ + ly."
-        color="orange"
-      />
-      <CoordCard 
-        icon={<Clock className="text-blue-500" />}
-        title="Thời gian (Time)"
-        desc="Trả lời câu hỏi: Khi nào?"
-        examples={["now", "then", "yesterday", "already", "lately"]}
-        note="Định vị hành động trên trục thời gian."
-        color="blue"
-      />
-      <CoordCard 
-        icon={<MapPin className="text-red-500" />}
-        title="Nơi chốn (Place)"
-        desc="Trả lời câu hỏi: Ở đâu?"
-        examples={["here", "there", "everywhere", "nearby", "upstairs"]}
-        note="Định vị hành động trong không gian."
-        color="red"
-      />
-      <CoordCard 
-        icon={<Layers className="text-purple-500" />}
-        title="Mức độ (Degree)"
-        desc="Đo lường cường độ, số lượng."
-        examples={["very", "too", "quite", "extremely", "enough"]}
-        note="Thường bổ nghĩa cho tính từ/trạng từ khác."
-        color="purple"
-      />
-      <CoordCard 
-        icon={<MessageSquare className="text-teal-500" />}
-        title="Đánh giá (Evaluation)"
-        desc="Cảm xúc của người nói về sự việc."
-        examples={["fortunately", "surprisingly", "sadly", "frankly"]}
-        note="Thường đứng đầu câu, bao trùm cả câu."
-        color="teal"
-      />
-      <CoordCard 
-        icon={<Compass className="text-slate-500" />}
-        title="Góc nhìn (Viewpoint)"
-        desc="Khía cạnh đang được nhắc đến."
-        examples={["personally", "economically", "financially"]}
-        note="Thiết lập hệ quy chiếu cho câu nói."
-        color="slate"
-      />
-    </div>
-  </div>
-);
-
-const CoordCard = ({ icon, title, desc, examples, note, color }) => {
-  const colorMap = {
-    orange: "bg-orange-50 border-orange-100",
-    blue: "bg-blue-50 border-blue-100",
-    red: "bg-red-50 border-red-100",
-    purple: "bg-purple-50 border-purple-100",
-    teal: "bg-teal-50 border-teal-100",
-    slate: "bg-slate-50 border-slate-200",
-  };
-
-  return (
-    <div className={`${colorMap[color]} p-6 rounded-2xl border flex flex-col`}>
-      <div className="flex items-center gap-3 mb-3">
-        {icon}
-        <h3 className="font-bold text-lg text-slate-800">{title}</h3>
-      </div>
-      <p className="text-sm text-slate-600 mb-4 flex-grow">{desc}</p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {examples.map((ex, i) => (
-          <span key={i} className="bg-white border border-slate-200 text-xs px-2 py-1 rounded-md font-mono text-slate-700">
-            {ex}
-          </span>
-        ))}
-      </div>
-      <p className="text-xs font-medium text-slate-500 italic mt-auto pt-2 border-t border-black/5">💡 {note}</p>
-    </div>
-  );
-};
-
-// 3. CHỨC NĂNG (CÁCH KHỚP NỐI)
-const ChucNangView = () => (
-  <div className="animate-fade-in space-y-8">
-    <div className="text-center mb-10">
-      <h2 className="text-3xl font-bold text-amber-800 mb-3">Nghệ Thuật Khớp Nối</h2>
-      <p className="text-slate-600">Trạng từ là món "trang sức" đa năng nhất trong tiếng Anh. Nó có thể gắn vào 4 đối tượng khác nhau.</p>
-    </div>
-
-    <div className="space-y-4">
-      <LinkRow 
-        target="1. Bổ nghĩa cho ĐỘNG TỪ" 
-        adv="carefully" 
-        base="noted"
-        sentence="The tailor CAREFULLY NOTED all my measurements."
-        explain="Làm rõ CÁCH THỨC hành động ghi chép diễn ra."
-      />
-      <LinkRow 
-        target="2. Bổ nghĩa cho TÍNH TỪ" 
-        adv="extremely" 
-        base="good"
-        sentence="The weather is EXTREMELY GOOD today."
-        explain="Đẩy MỨC ĐỘ của tính từ (tốt) lên mức cực hạn."
-      />
-      <LinkRow 
-        target="3. Bổ nghĩa cho TRẠNG TỪ KHÁC" 
-        adv="incredibly" 
-        base="slowly"
-        sentence="The week seemed to go by INCREDIBLY SLOWLY."
-        explain="Trạng từ chỉ mức độ (incredibly) bổ trợ cho trạng từ chỉ cách thức (slowly)."
-      />
-      <LinkRow 
-        target="4. Bổ nghĩa cho CẢ CÂU" 
-        adv="Astonishingly," 
-        base="she did well"
-        sentence="ASTONISHINGLY, she did well in the exam."
-        explain="Đứng tách biệt bằng dấu phẩy, thể hiện THÁI ĐỘ của người nói về toàn bộ sự việc phía sau."
-      />
-    </div>
-  </div>
-);
-
-const LinkRow = ({ target, adv, base, sentence, explain }) => {
-  // Highlight the target words in the sentence
-  const parts = sentence.split(new RegExp(`(${adv.toUpperCase()}|${base.toUpperCase()})`, 'g'));
-
-  return (
-    <div className="bg-white border border-amber-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition">
-      <h4 className="font-bold text-amber-700 mb-3 flex items-center gap-2">
-        <ArrowRight size={18} /> {target}
-      </h4>
-      <div className="bg-slate-50 p-3 rounded-lg font-mono text-slate-800 text-sm md:text-base mb-3 border border-slate-200">
-        {parts.map((part, i) => {
-          if (part === adv.toUpperCase()) return <span key={i} className="text-white bg-amber-500 px-1 rounded mx-1">{part}</span>;
-          if (part === base.toUpperCase()) return <span key={i} className="text-white bg-slate-700 px-1 rounded mx-1 underline">{part}</span>;
-          return <span key={i}>{part}</span>;
-        })}
-      </div>
-      <p className="text-sm text-slate-600"><strong>Bản chất:</strong> {explain}</p>
-    </div>
-  );
-};
-
-// 4. CẠM BẪY (Ngoại lệ)
-const CamBayView = () => (
-  <div className="animate-fade-in space-y-8">
-    <div className="text-center mb-10">
-      <h2 className="text-3xl font-bold text-rose-800 mb-3">Những Cú Lừa Ngôn Ngữ</h2>
-      <p className="text-slate-600">Tiếng Anh có những "tàn dư lịch sử" không tuân theo quy luật +ly.</p>
-    </div>
-
-    <div className="grid md:grid-cols-2 gap-6">
-      {/* Flat Adverbs */}
-      <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl">
-        <h3 className="font-bold text-xl text-rose-800 mb-4 border-b border-rose-200 pb-2">1. Trạng Từ Phẳng (Flat Adverbs)</h3>
-        <p className="text-sm text-slate-700 mb-4">
-          Do sự xói mòn lịch sử, một số từ <strong>giữ nguyên hình dạng</strong> dù là tính từ hay trạng từ. Không bao giờ thêm -ly!
-        </p>
-        <ul className="space-y-3">
-          {["fast", "hard", "late", "early", "straight"].map(word => (
-            <li key={word} className="flex justify-between items-center bg-white p-2 rounded border border-rose-100">
-              <span className="font-mono font-bold text-rose-700">{word}</span>
-              <span className="text-xs text-slate-500">Tính & Trạng giống nhau</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-4 p-3 bg-white/60 rounded text-sm text-rose-900 border border-rose-100">
-          <strong>Ví dụ:</strong> He is a <em>fast</em> runner ➔ He runs <em>fast</em> (Không có fastly).
-        </div>
-      </div>
-
-      {/* Thay đổi nghĩa */}
-      <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl">
-        <h3 className="font-bold text-xl text-rose-800 mb-4 border-b border-rose-200 pb-2">2. Thêm -ly = Đổi luôn nghĩa!</h3>
-        <p className="text-sm text-slate-700 mb-4">
-          Một số từ khi thêm -ly KHÔNG mang nghĩa cách thức của tính từ gốc, mà mang một nghĩa hoàn toàn khác.
-        </p>
-        <div className="space-y-4">
-          <div className="bg-white p-3 rounded border border-rose-100">
-            <div className="flex justify-between font-bold mb-1">
-              <span className="text-slate-800">Hard (Cứng/Chăm chỉ)</span>
-              <ArrowRight className="text-rose-400" />
-              <span className="text-rose-600">Hardly (Hầu như không)</span>
-            </div>
-            <p className="text-xs text-slate-500">Work <strong>hard</strong> (Làm việc chăm) ≠ <strong>Hardly</strong> work (Chả làm gì mấy).</p>
-          </div>
-          
-          <div className="bg-white p-3 rounded border border-rose-100">
-            <div className="flex justify-between font-bold mb-1">
-              <span className="text-slate-800">Late (Muộn)</span>
-              <ArrowRight className="text-rose-400" />
-              <span className="text-rose-600">Lately (Gần đây)</span>
-            </div>
-            <p className="text-xs text-slate-500">Arrive <strong>late</strong> (Đến muộn) ≠ <strong>Lately</strong>, I'm tired (Gần đây tôi mệt).</p>
-          </div>
-
-          <div className="bg-white p-3 rounded border border-rose-100">
-            <div className="flex justify-between font-bold mb-1">
-              <span className="text-slate-800">High (Cao - Vật lý)</span>
-              <ArrowRight className="text-rose-400" />
-              <span className="text-rose-600">Highly (Rất - Mức độ)</span>
-            </div>
-            <p className="text-xs text-slate-500">Fly <strong>high</strong> (Bay cao) ≠ <strong>Highly</strong> recommend (Rất đề xuất).</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Tính từ đuôi -ly */}
-      <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl md:col-span-2">
-        <h3 className="font-bold text-xl text-rose-800 mb-2">3. Trông giống trạng từ nhưng là TÍNH TỪ</h3>
-        <p className="text-sm text-slate-700 mb-4">Công thức: <strong>Danh từ + ly = Tính từ</strong>. Nếu muốn dùng như trạng từ, phải đổi cấu trúc thành "in a ... way".</p>
-        <div className="flex flex-wrap gap-3">
-          {["friendly", "lovely", "lively", "lonely", "silly"].map(word => (
-            <span key={word} className="bg-white border border-rose-200 px-3 py-1 rounded-full font-mono text-rose-700 font-bold">
-              {word}
-            </span>
-          ))}
-        </div>
-        <p className="mt-4 text-sm font-medium">✅ He is friendly. (Đúng)<br/>❌ He speaks friendly. (Sai)<br/>✅ He speaks <span className="underline">in a friendly way</span>. (Đúng)</p>
-      </div>
-    </div>
-  </div>
-);
-
-// 5. THỰC HÀNH TƯ DUY
-const ThucHanhView = () => {
-  const questions = [
-    {
-      q: "She looked at me ________ when I broke her favorite vase.",
-      options: ["angry", "angrily", "in an angrily way"],
-      ans: "angrily",
-      explain: "Hành động 'looked at' (nhìn) cần một trạng từ để mô tả CÁCH THỨC nhìn. Tính từ 'angry' chuyển thành 'angrily'."
-    },
-    {
-      q: "I have been working very ________ all day.",
-      options: ["hard", "hardly", "hard way"],
-      ans: "hard",
-      explain: "'Hard' là trạng từ phẳng, giữ nguyên đuôi khi mang nghĩa 'chăm chỉ, vất vả'. Nếu dùng 'hardly' nó sẽ mang nghĩa là 'hầu như không làm gì'."
-    },
-    {
-      q: "The soup smells really ________. What's in it?",
-      options: ["good", "well", "goodly"],
-      ans: "good",
-      explain: "Lưu ý! Các động từ chỉ giác quan (smell, taste, feel, look) hoạt động như chiếc GƯƠNG phản chiếu bản chất chủ ngữ (soup). Do đó ta cần Tính từ (nhãn dán) 'good', không phải trạng từ."
-    },
-    {
-      q: "Have you seen John ________? I can't find him.",
-      options: ["late", "lately", "latelier"],
-      ans: "lately",
-      explain: "Trong ngữ cảnh này, ta cần trạng từ mang nghĩa 'gần đây' (chỉ thời gian chung chung), nên phải dùng 'lately'. 'Late' nghĩa là 'trễ giờ'."
-    },
-    {
-      q: "She always speaks to customers in a ________ way.",
-      options: ["friend", "friendly", "friendlily"],
-      ans: "friendly",
-      explain: "'Friendly' (Danh từ friend + ly) là một TÍNH TỪ. Đứng trước danh từ 'way' ta cần tính từ. Cấu trúc 'in a friendly way' là cách biến nó thành cụm trạng từ."
-    }
-  ];
-
-  const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-
-  const handleSelect = (opt) => {
-    if (selected) return;
-    setSelected(opt);
-    if (opt === questions[current].ans) setScore(s => s + 1);
-  };
-
-  const handleNext = () => {
-    if (current < questions.length - 1) {
-      setCurrent(c => c + 1);
-      setSelected(null);
-    } else {
-      setFinished(true);
-    }
-  };
-
-  const restart = () => {
-    setCurrent(0);
-    setSelected(null);
-    setScore(0);
-    setFinished(false);
-  };
-
-  if (finished) {
-    return (
-      <div className="text-center py-12 animate-fade-in">
-        <div className="text-6xl mb-6">🏆</div>
-        <h2 className="text-4xl font-bold mb-4 text-blue-900">Hoàn thành!</h2>
-        <p className="text-2xl font-bold text-blue-600 mb-4">Điểm: {score} / {questions.length}</p>
-        <p className="text-slate-600 max-w-md mx-auto mb-8">
-          Bạn đã thực sự hiểu bản chất của hệ thống ngôn ngữ này chứ không chỉ nhớ công thức. Hãy tiếp tục duy trì lăng kính tư duy này nhé!
-        </p>
-        <button onClick={restart} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg">
-          Luyện tập lại
-        </button>
-      </div>
-    );
-  }
-
-  const q = questions[current];
-
-  return (
-    <div className="max-w-2xl mx-auto animate-fade-in">
-      <div className="flex justify-between items-center mb-6 text-sm font-bold text-blue-500 bg-blue-50 py-2 px-4 rounded-lg">
-        <span>Thử thách {current + 1} / {questions.length}</span>
-        <span>Điểm: {score}</span>
-      </div>
-
-      <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-lg mb-6 text-xl font-medium leading-relaxed">
-        {q.q.split('________').map((part, i, arr) => (
-          <React.Fragment key={i}>
-            {part}
-            {i < arr.length - 1 && (
-              <span className={`inline-block px-4 mx-2 rounded border-b-2 ${selected ? 'text-amber-400 border-amber-400 font-bold' : 'text-slate-500 border-slate-500'}`}>
-                {selected || '...?'}
-              </span>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-3 mb-6">
-        {q.options.map((opt, idx) => {
-          let btnClass = "p-4 rounded-xl border-2 font-bold transition-all text-left text-lg ";
-          if (!selected) {
-            btnClass += "border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 hover:shadow-md";
-          } else {
-            if (opt === q.ans) {
-              btnClass += "border-emerald-500 bg-emerald-100 text-emerald-800 scale-[1.02]";
-            } else if (opt === selected) {
-              btnClass += "border-rose-500 bg-rose-100 text-rose-800";
-            } else {
-              btnClass += "border-slate-100 opacity-40 text-slate-400";
-            }
-          }
+          // Đã thay thế icon bằng Emoji
+          const tabs = [
+            { id: 'banchat', label: 'Cội Nguồn', icon: '🧠', color: 'bg-indigo-500' },
+            { id: 'phanloai', label: 'Hệ Tọa Độ', icon: '🧭', color: 'bg-emerald-500' },
+            { id: 'chucnang', label: 'Khớp Nối', icon: '🧩', color: 'bg-amber-500' },
+            { id: 'cambay', label: 'Cạm Bẫy', icon: '⚠️', color: 'bg-rose-500' },
+            { id: 'thuchanh', label: 'Thực Hành', icon: '▶️', color: 'bg-blue-500' },
+          ];
 
           return (
-            <button key={idx} onClick={() => handleSelect(opt)} disabled={!!selected} className={btnClass}>
-              {opt}
-            </button>
+            <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-12">
+              {/* Header */}
+              <div className="bg-slate-900 text-white pt-12 pb-24 px-4 text-center rounded-b-[3rem] shadow-xl">
+                <h1 className="text-4xl md:text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                  Làm Chủ Tính Từ & Trạng Từ
+                </h1>
+                <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light">
+                  Khám phá bản chất ngôn ngữ: Từ những chiếc "nhãn dán" tĩnh lặng đến "hệ tọa độ" của hành động.
+                </p>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="max-w-6xl mx-auto px-4 -mt-16">
+                {/* Navigation */}
+                <div className="flex flex-wrap justify-center gap-2 mb-8 bg-white/80 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-slate-100">
+                  {tabs.map(tab => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all duration-300 ${
+                          isActive 
+                            ? `${tab.color} text-white shadow-md transform scale-105` 
+                            : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                        }`}
+                      >
+                        <span className="text-xl">{tab.icon}</span>
+                        <span className="hidden md:inline">{tab.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Dynamic Content Views */}
+                <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-10 min-h-[600px]">
+                  {activeTab === 'banchat' && <BanChatView />}
+                  {activeTab === 'phanloai' && <PhanLoaiView />}
+                  {activeTab === 'chucnang' && <ChucNangView />}
+                  {activeTab === 'cambay' && <CamBayView />}
+                  {activeTab === 'thuchanh' && <ThucHanhView />}
+                </div>
+              </div>
+            </div>
           );
-        })}
-      </div>
+        };
 
-      {selected && (
-        <div className={`p-6 rounded-2xl mb-6 shadow-sm border ${selected === q.ans ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'} animate-fade-in`}>
-          <div className={`font-black text-xl flex items-center gap-2 mb-3 ${selected === q.ans ? 'text-emerald-700' : 'text-rose-700'}`}>
-            {selected === q.ans ? <CheckCircle2 size={24} /> : <XCircle size={24} />}
-            {selected === q.ans ? 'Chính xác! Lăng kính tư duy rất tốt.' : 'Cẩn thận cạm bẫy!'}
+        /* ================= COMPONENT VIEWS ================= */
+
+        // 1. GÓC NHÌN BẢN CHẤT
+        const BanChatView = () => (
+          <div className="animate-fade-in space-y-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-slate-800 mb-3">Triết lý: Tĩnh và Động</h2>
+              <p className="text-slate-600">Cách con người gán nhãn cho thế giới và tạo ra sự chuyển động.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Tính từ */}
+              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl border border-indigo-100 relative overflow-hidden shadow-sm">
+                <div className="absolute -bottom-4 -right-4 opacity-10 text-9xl transform -rotate-12">🏷️</div>
+                <div className="relative z-10">
+                  <div className="bg-indigo-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-200 text-2xl">
+                    🏷️
+                  </div>
+                  <h3 className="text-2xl font-black text-indigo-900 mb-4">Tính từ (Adjective)</h3>
+                  <p className="text-indigo-800 font-bold text-lg mb-2">Bản chất: "Chiếc nhãn dán" tĩnh.</p>
+                  <p className="text-slate-700 leading-relaxed mb-4">
+                    Dùng để dán lên một Danh từ (người, vật) nhằm xác định <strong>bản chất nội tại</strong> của nó khi nó đang đứng im.
+                  </p>
+                  <div className="bg-white/60 p-4 rounded-xl border border-indigo-200">
+                    <p className="font-mono text-indigo-900">He is a <span className="font-bold text-indigo-600 bg-indigo-100 px-1 rounded">careful</span> driver.</p>
+                    <p className="text-sm text-slate-600 mt-2">↳ Anh ta có bản chất là người cẩn thận.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trạng từ */}
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 rounded-3xl border border-emerald-100 relative overflow-hidden shadow-sm">
+                <div className="absolute -bottom-4 -right-4 opacity-10 text-9xl transform rotate-12">▶️</div>
+                <div className="relative z-10">
+                  <div className="bg-emerald-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200 text-2xl">
+                    ▶️
+                  </div>
+                  <h3 className="text-2xl font-black text-emerald-900 mb-4">Trạng từ (Adverb)</h3>
+                  <p className="text-emerald-800 font-bold text-lg mb-2">Bản chất: "Tính từ của hành động".</p>
+                  <p className="text-slate-700 leading-relaxed mb-4">
+                    Đuôi <strong>-ly</strong> đóng vai trò như nút PLAY. Nó biến tính chất nội tại hòa tan vào nhịp điệu của một hành động.
+                  </p>
+                  <div className="bg-white/60 p-4 rounded-xl border border-emerald-200">
+                    <p className="font-mono text-emerald-900">He drives <span className="font-bold text-emerald-600 bg-emerald-100 px-1 rounded">carefully</span>.</p>
+                    <p className="text-sm text-slate-600 mt-2">↳ Sự cẩn thận nhuốm màu vào thao tác lái xe.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Lịch sử đuôi -ly */}
+            <div className="bg-slate-900 text-slate-300 p-8 rounded-3xl mt-8 flex flex-col md:flex-row items-center gap-6">
+              <div className="text-6xl flex-shrink-0">📖</div>
+              <div>
+                <h4 className="text-amber-400 font-bold text-xl mb-2">Bí ẩn lịch sử: Tại sao lại là đuôi "-ly"?</h4>
+                <p className="text-sm md:text-base">
+                  Trong tiếng Anh cổ, đuôi này là <strong>-lic</strong> (nghĩa là "like" - giống như). Thay vì nói "Anh ấy hành động giống-như-sự-cẩn-thận" (careful-like), qua hàng thế kỷ, chữ "like" bị đọc nuốt đi và xói mòn thành âm <strong>"-ly"</strong>. Việc thêm "-ly" là cách ngôn ngữ tái chế từ vựng cực kỳ tiết kiệm!
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="text-slate-700 leading-relaxed text-lg"><strong>Phân tích:</strong> {q.explain}</p>
-        </div>
-      )}
+        );
 
-      {selected && (
-        <button 
-          onClick={handleNext}
-          className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2 hover:bg-black transition text-lg shadow-md"
-        >
-          {current === questions.length - 1 ? 'Xem kết quả cuối cùng' : 'Câu tiếp theo'} <ArrowRight size={20} />
-        </button>
-      )}
-    </div>
-  );
-};
+        // 2. PHÂN LOẠI (HỆ TỌA ĐỘ)
+        const PhanLoaiView = () => (
+          <div className="animate-fade-in space-y-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-emerald-800 mb-3">Hệ Tọa Độ Ngôn Ngữ</h2>
+              <p className="text-slate-600">Trạng từ không sinh ra từ tính từ (như now, here, very) đóng vai trò là "Metadata" (Siêu dữ liệu) thiết lập không gian, thời gian cho câu.</p>
+            </div>
 
-export default App;
+            <div className="grid md:grid-cols-3 gap-4">
+              <CoordCard 
+                icon="⚡"
+                title="Cách thức (Manner)"
+                desc="Trả lời câu hỏi: Như thế nào?"
+                examples={["carefully", "fast", "straight", "loudly"]}
+                note="Thường sinh ra từ Tính từ + ly."
+                color="orange"
+              />
+              <CoordCard 
+                icon="⏰"
+                title="Thời gian (Time)"
+                desc="Trả lời câu hỏi: Khi nào?"
+                examples={["now", "then", "yesterday", "already", "lately"]}
+                note="Định vị hành động trên trục thời gian."
+                color="blue"
+              />
+              <CoordCard 
+                icon="📍"
+                title="Nơi chốn (Place)"
+                desc="Trả lời câu hỏi: Ở đâu?"
+                examples={["here", "there", "everywhere", "nearby", "upstairs"]}
+                note="Định vị hành động trong không gian."
+                color="red"
+              />
+              <CoordCard 
+                icon="📊"
+                title="Mức độ (Degree)"
+                desc="Đo lường cường độ, số lượng."
+                examples={["very", "too", "quite", "extremely", "enough"]}
+                note="Thường bổ nghĩa cho tính từ/trạng từ khác."
+                color="purple"
+              />
+              <CoordCard 
+                icon="💬"
+                title="Đánh giá (Evaluation)"
+                desc="Cảm xúc của người nói về sự việc."
+                examples={["fortunately", "surprisingly", "sadly", "frankly"]}
+                note="Thường đứng đầu câu, bao trùm cả câu."
+                color="teal"
+              />
+              <CoordCard 
+                icon="🧭"
+                title="Góc nhìn (Viewpoint)"
+                desc="Khía cạnh đang được nhắc đến."
+                examples={["personally", "economically", "financially"]}
+                note="Thiết lập hệ quy chiếu cho câu nói."
+                color="slate"
+              />
+            </div>
+          </div>
+        );
+
+        const CoordCard = ({ icon, title, desc, examples, note, color }) => {
+          const colorMap = {
+            orange: "bg-orange-50 border-orange-100",
+            blue: "bg-blue-50 border-blue-100",
+            red: "bg-red-50 border-red-100",
+            purple: "bg-purple-50 border-purple-100",
+            teal: "bg-teal-50 border-teal-100",
+            slate: "bg-slate-50 border-slate-200",
+          };
+
+          return (
+            <div className={`${colorMap[color]} p-6 rounded-2xl border flex flex-col`}>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-2xl">{icon}</span>
+                <h3 className="font-bold text-lg text-slate-800">{title}</h3>
+              </div>
+              <p className="text-sm text-slate-600 mb-4 flex-grow">{desc}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {examples.map((ex, i) => (
+                  <span key={i} className="bg-white border border-slate-200 text-xs px-2 py-1 rounded-md font-mono text-slate-700">
+                    {ex}
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs font-medium text-slate-500 italic mt-auto pt-2 border-t border-black/5">💡 {note}</p>
+            </div>
+          );
+        };
+
+        // 3. CHỨC NĂNG (CÁCH KHỚP NỐI)
+        const ChucNangView = () => (
+          <div className="animate-fade-in space-y-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-amber-800 mb-3">Nghệ Thuật Khớp Nối</h2>
+              <p className="text-slate-600">Trạng từ là món "trang sức" đa năng nhất trong tiếng Anh. Nó có thể gắn vào 4 đối tượng khác nhau.</p>
+            </div>
+
+            <div className="space-y-4">
+              <LinkRow 
+                target="1. Bổ nghĩa cho ĐỘNG TỪ" 
+                adv="carefully" 
+                base="noted"
+                sentence="The tailor CAREFULLY NOTED all my measurements."
+                explain="Làm rõ CÁCH THỨC hành động ghi chép diễn ra."
+              />
+              <LinkRow 
+                target="2. Bổ nghĩa cho TÍNH TỪ" 
+                adv="extremely" 
+                base="good"
+                sentence="The weather is EXTREMELY GOOD today."
+                explain="Đẩy MỨC ĐỘ của tính từ (tốt) lên mức cực hạn."
+              />
+              <LinkRow 
+                target="3. Bổ nghĩa cho TRẠNG TỪ KHÁC" 
+                adv="incredibly" 
+                base="slowly"
+                sentence="The week seemed to go by INCREDIBLY SLOWLY."
+                explain="Trạng từ chỉ mức độ (incredibly) bổ trợ cho trạng từ chỉ cách thức (slowly)."
+              />
+              <LinkRow 
+                target="4. Bổ nghĩa cho CẢ CÂU" 
+                adv="Astonishingly," 
+                base="she did well"
+                sentence="ASTONISHINGLY, she did well in the exam."
+                explain="Đứng tách biệt bằng dấu phẩy, thể hiện THÁI ĐỘ của người nói về toàn bộ sự việc phía sau."
+              />
+            </div>
+          </div>
+        );
+
+        const LinkRow = ({ target, adv, base, sentence, explain }) => {
+          const parts = sentence.split(new RegExp(`(${adv.toUpperCase()}|${base.toUpperCase()})`, 'g'));
+
+          return (
+            <div className="bg-white border border-amber-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition">
+              <h4 className="font-bold text-amber-700 mb-3 flex items-center gap-2">
+                ➡️ {target}
+              </h4>
+              <div className="bg-slate-50 p-3 rounded-lg font-mono text-slate-800 text-sm md:text-base mb-3 border border-slate-200">
+                {parts.map((part, i) => {
+                  if (part === adv.toUpperCase()) return <span key={i} className="text-white bg-amber-500 px-1 rounded mx-1">{part}</span>;
+                  if (part === base.toUpperCase()) return <span key={i} className="text-white bg-slate-700 px-1 rounded mx-1 underline">{part}</span>;
+                  return <span key={i}>{part}</span>;
+                })}
+              </div>
+              <p className="text-sm text-slate-600"><strong>Bản chất:</strong> {explain}</p>
+            </div>
+          );
+        };
+
+        // 4. CẠM BẪY (Ngoại lệ)
+        const CamBayView = () => (
+          <div className="animate-fade-in space-y-8">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-rose-800 mb-3">Những Cú Lừa Ngôn Ngữ</h2>
+              <p className="text-slate-600">Tiếng Anh có những "tàn dư lịch sử" không tuân theo quy luật +ly.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Flat Adverbs */}
+              <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl">
+                <h3 className="font-bold text-xl text-rose-800 mb-4 border-b border-rose-200 pb-2">1. Trạng Từ Phẳng (Flat Adverbs)</h3>
+                <p className="text-sm text-slate-700 mb-4">
+                  Do sự xói mòn lịch sử, một số từ <strong>giữ nguyên hình dạng</strong> dù là tính từ hay trạng từ. Không bao giờ thêm -ly!
+                </p>
+                <ul className="space-y-3">
+                  {["fast", "hard", "late", "early", "straight"].map(word => (
+                    <li key={word} className="flex justify-between items-center bg-white p-2 rounded border border-rose-100">
+                      <span className="font-mono font-bold text-rose-700">{word}</span>
+                      <span className="text-xs text-slate-500">Tính & Trạng giống nhau</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 p-3 bg-white/60 rounded text-sm text-rose-900 border border-rose-100">
+                  <strong>Ví dụ:</strong> He is a <em>fast</em> runner ➔ He runs <em>fast</em> (Không có fastly).
+                </div>
+              </div>
+
+              {/* Thay đổi nghĩa */}
+              <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl">
+                <h3 className="font-bold text-xl text-rose-800 mb-4 border-b border-rose-200 pb-2">2. Thêm -ly = Đổi luôn nghĩa!</h3>
+                <p className="text-sm text-slate-700 mb-4">
+                  Một số từ khi thêm -ly KHÔNG mang nghĩa cách thức của tính từ gốc, mà mang một nghĩa hoàn toàn khác.
+                </p>
+                <div className="space-y-4">
+                  <div className="bg-white p-3 rounded border border-rose-100">
+                    <div className="flex justify-between font-bold mb-1">
+                      <span className="text-slate-800">Hard (Cứng/Chăm chỉ)</span>
+                      <span>➡️</span>
+                      <span className="text-rose-600">Hardly (Hầu như không)</span>
+                    </div>
+                    <p className="text-xs text-slate-500">Work <strong>hard</strong> (Làm việc chăm) ≠ <strong>Hardly</strong> work (Chả làm gì mấy).</p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-rose-100">
+                    <div className="flex justify-between font-bold mb-1">
+                      <span className="text-slate-800">Late (Muộn)</span>
+                      <span>➡️</span>
+                      <span className="text-rose-600">Lately (Gần đây)</span>
+                    </div>
+                    <p className="text-xs text-slate-500">Arrive <strong>late</strong> (Đến muộn) ≠ <strong>Lately</strong>, I'm tired (Gần đây tôi mệt).</p>
+                  </div>
+
+                  <div className="bg-white p-3 rounded border border-rose-100">
+                    <div className="flex justify-between font-bold mb-1">
+                      <span className="text-slate-800">High (Cao - Vật lý)</span>
+                      <span>➡️</span>
+                      <span className="text-rose-600">Highly (Rất - Mức độ)</span>
+                    </div>
+                    <p className="text-xs text-slate-500">Fly <strong>high</strong> (Bay cao) ≠ <strong>Highly</strong> recommend (Rất đề xuất).</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tính từ đuôi -ly */}
+              <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl md:col-span-2">
+                <h3 className="font-bold text-xl text-rose-800 mb-2">3. Trông giống trạng từ nhưng là TÍNH TỪ</h3>
+                <p className="text-sm text-slate-700 mb-4">Công thức: <strong>Danh từ + ly = Tính từ</strong>. Nếu muốn dùng như trạng từ, phải đổi cấu trúc thành "in a ... way".</p>
+                <div className="flex flex-wrap gap-3">
+                  {["friendly", "lovely", "lively", "lonely", "silly"].map(word => (
+                    <span key={word} className="bg-white border border-rose-200 px-3 py-1 rounded-full font-mono text-rose-700 font-bold shadow-sm">
+                      {word}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-4 text-sm font-medium">✅ He is friendly. (Đúng)<br/>❌ He speaks friendly. (Sai)<br/>✅ He speaks <span className="underline">in a friendly way</span>. (Đúng)</p>
+              </div>
+            </div>
+          </div>
+        );
+
+        // 5. THỰC HÀNH TƯ DUY
+        const ThucHanhView = () => {
+          const questions = [
+            {
+              q: "She looked at me ________ when I broke her favorite vase.",
+              options: ["angry", "angrily", "in an angrily way"],
+              ans: "angrily",
+              explain: "Hành động 'looked at' (nhìn) cần một trạng từ để mô tả CÁCH THỨC nhìn. Tính từ 'angry' chuyển thành 'angrily'."
+            },
+            {
+              q: "I have been working very ________ all day.",
+              options: ["hard", "hardly", "hard way"],
+              ans: "hard",
+              explain: "'Hard' là trạng từ phẳng, giữ nguyên đuôi khi mang nghĩa 'chăm chỉ, vất vả'. Nếu dùng 'hardly' nó sẽ mang nghĩa là 'hầu như không làm gì'."
+            },
+            {
+              q: "The soup smells really ________. What's in it?",
+              options: ["good", "well", "goodly"],
+              ans: "good",
+              explain: "Lưu ý! Các động từ chỉ giác quan (smell, taste, feel, look) hoạt động như chiếc GƯƠNG phản chiếu bản chất chủ ngữ (soup). Do đó ta cần Tính từ (nhãn dán) 'good', không phải trạng từ."
+            },
+            {
+              q: "Have you seen John ________? I can't find him.",
+              options: ["late", "lately", "latelier"],
+              ans: "lately",
+              explain: "Trong ngữ cảnh này, ta cần trạng từ mang nghĩa 'gần đây' (chỉ thời gian chung chung), nên phải dùng 'lately'. 'Late' nghĩa là 'trễ giờ'."
+            },
+            {
+              q: "She always speaks to customers in a ________ way.",
+              options: ["friend", "friendly", "friendlily"],
+              ans: "friendly",
+              explain: "'Friendly' (Danh từ friend + ly) là một TÍNH TỪ. Đứng trước danh từ 'way' ta cần tính từ. Cấu trúc 'in a friendly way' là cách biến nó thành cụm trạng từ."
+            }
+          ];
+
+          const [current, setCurrent] = useState(0);
+          const [selected, setSelected] = useState(null);
+          const [score, setScore] = useState(0);
+          const [finished, setFinished] = useState(false);
+
+          const handleSelect = (opt) => {
+            if (selected) return;
+            setSelected(opt);
+            if (opt === questions[current].ans) setScore(s => s + 1);
+          };
+
+          const handleNext = () => {
+            if (current < questions.length - 1) {
+              setCurrent(c => c + 1);
+              setSelected(null);
+            } else {
+              setFinished(true);
+            }
+          };
+
+          const restart = () => {
+            setCurrent(0); setSelected(null); setScore(0); setFinished(false);
+          };
+
+          if (finished) {
+            return (
+              <div className="text-center py-12 animate-fade-in">
+                <div className="text-6xl mb-6">🏆</div>
+                <h2 className="text-4xl font-bold mb-4 text-blue-900">Hoàn thành!</h2>
+                <p className="text-2xl font-bold text-blue-600 mb-4">Điểm: {score} / {questions.length}</p>
+                <p className="text-slate-600 max-w-md mx-auto mb-8">
+                  Bạn đã thực sự hiểu bản chất của hệ thống ngôn ngữ này chứ không chỉ nhớ công thức. Hãy tiếp tục duy trì lăng kính tư duy này nhé!
+                </p>
+                <button onClick={restart} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg">
+                  🔄 Luyện tập lại
+                </button>
+              </div>
+            );
+          }
+
+          const q = questions[current];
+
+          return (
+            <div className="max-w-2xl mx-auto animate-fade-in">
+              <div className="flex justify-between items-center mb-6 text-sm font-bold text-blue-500 bg-blue-50 py-2 px-4 rounded-lg">
+                <span>Thử thách {current + 1} / {questions.length}</span>
+                <span>Điểm: {score}</span>
+              </div>
+
+              <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-lg mb-6 text-xl font-medium leading-relaxed">
+                {q.q.split('________').map((part, i, arr) => (
+                  <React.Fragment key={i}>
+                    {part}
+                    {i < arr.length - 1 && (
+                      <span className={`inline-block px-4 mx-2 rounded border-b-2 ${selected ? 'text-amber-400 border-amber-400 font-bold' : 'text-slate-500 border-slate-500'}`}>
+                        {selected || '...?'}
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-3 mb-6">
+                {q.options.map((opt, idx) => {
+                  let btnClass = "p-4 rounded-xl border-2 font-bold transition-all text-left text-lg ";
+                  if (!selected) {
+                    btnClass += "border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700 hover:shadow-md";
+                  } else {
+                    if (opt === q.ans) {
+                      btnClass += "border-emerald-500 bg-emerald-100 text-emerald-800 scale-[1.02]";
+                    } else if (opt === selected) {
+                      btnClass += "border-rose-500 bg-rose-100 text-rose-800";
+                    } else {
+                      btnClass += "border-slate-100 opacity-40 text-slate-400";
+                    }
+                  }
+
+                  return (
+                    <button key={idx} onClick={() => handleSelect(opt)} disabled={!!selected} className={btnClass}>
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selected && (
+                <div className={`p-6 rounded-2xl mb-6 shadow-sm border ${selected === q.ans ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'} animate-fade-in`}>
+                  <div className={`font-black text-xl flex items-center gap-2 mb-3 ${selected === q.ans ? 'text-emerald-700' : 'text-rose-700'}`}>
+                    {selected === q.ans ? '✅ Chính xác! Lăng kính tư duy rất tốt.' : '❌ Cẩn thận cạm bẫy!'}
+                  </div>
+                  <p className="text-slate-700 leading-relaxed text-lg"><strong>Phân tích:</strong> {q.explain}</p>
+                </div>
+              )}
+
+              {selected && (
+                <button 
+                  onClick={handleNext}
+                  className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2 hover:bg-black transition text-lg shadow-md"
+                >
+                  {current === questions.length - 1 ? 'Xem kết quả cuối cùng' : 'Câu tiếp theo'} ➡️
+                </button>
+              )}
+            </div>
+          );
+        };
+
+        // Khởi chạy ứng dụng
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
