@@ -20,8 +20,8 @@
 
     <style>
         /* Tinh chỉnh scrollbar cho đẹp */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         body { background-color: #f8fafc; }
@@ -130,70 +130,79 @@
         // --- COMPONENT: SƠ ĐỒ TƯ DUY (MINDMAP) ---
         const MindmapView = ({ onNodeClick }) => {
           return (
-            <div className="relative w-full h-[600px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden flex items-center justify-center p-8">
-              {/* Background Grid */}
-              <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
-              
-              {/* SVG Connecting Lines */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                <path d="M 50% 20% Q 30% 35% 25% 50%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
-                <path d="M 50% 20% Q 70% 35% 75% 50%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+            // Wrapper overflow-x-auto giúp tránh lỗi chồng chéo khi thu nhỏ màn hình
+            <div className="w-full overflow-x-auto bg-slate-50 rounded-2xl border border-slate-200 shadow-inner">
+              <div className="relative min-w-[1000px] h-[600px] flex items-center justify-center p-8 mx-auto">
+                {/* Background Grid */}
+                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
                 
-                <path d="M 25% 50% L 15% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
-                <path d="M 25% 50% L 25% 80%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
-                <path d="M 25% 50% L 35% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
+                {/* SVG Connecting Lines */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  {/* Lines from Root */}
+                  <path d="M 50% 15% Q 30% 25% 25% 45%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+                  <path d="M 50% 15% Q 70% 25% 75% 45%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+                  
+                  {/* Adjectives Lines */}
+                  <path d="M 25% 45% L 15% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
+                  <path d="M 25% 45% L 27% 80%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
+                  <path d="M 25% 45% L 39% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
 
-                <path d="M 75% 50% L 60% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                <path d="M 75% 50% L 70% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                <path d="M 75% 50% L 80% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                <path d="M 75% 50% L 90% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
+                  {/* Adverbs Lines */}
+                  <path d="M 75% 45% L 60% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
+                  <path d="M 75% 45% L 70% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
+                  <path d="M 75% 45% L 80% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
+                  <path d="M 75% 45% L 90% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
 
-                <path d="M 15% 75% Q 40% 90% 60% 75%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
-                <text x="37%" y="81%" fill="#d97706" fontSize="12" fontWeight="bold">Thêm đuôi "-ly"</text>
-                
-                <path d="M 35% 75% Q 55% 65% 80% 85%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
-                <text x="52%" y="71%" fill="#d97706" fontSize="12" fontWeight="bold">Cùng bổ nghĩa mức độ</text>
-              </svg>
+                  {/* Cross Relationships */}
+                  {/* 1. Miêu tả (15% 75%) -> Thể cách (60% 75%) */}
+                  <path d="M 15% 75% Q 37.5% 60% 60% 75%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
+                  <text x="37.5%" y="64%" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Thêm đuôi "-ly"</text>
+                  
+                  {/* 2. Định lượng (27% 80%) -> Mức độ (80% 85%) */}
+                  <path d="M 27% 80% Q 53.5% 95% 80% 85%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
+                  <text x="53.5%" y="90%" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Cùng bổ nghĩa mức độ</text>
+                </svg>
 
-              {/* Nodes */}
-              <div className="absolute top-[15%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className="bg-slate-800 text-white px-6 py-3 rounded-xl shadow-lg font-bold text-lg border-4 border-slate-700 hover:scale-105 transition-transform cursor-default text-center">
-                  MODIFIERS <br/><span className="text-sm font-normal text-slate-300">(Từ Bổ Nghĩa)</span>
+                {/* Nodes */}
+                <div className="absolute top-[15%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="bg-slate-800 text-white px-6 py-3 rounded-xl shadow-lg font-bold text-lg border-4 border-slate-700 hover:scale-105 transition-transform cursor-default text-center">
+                    MODIFIERS <br/><span className="text-sm font-normal text-slate-300">(Từ Bổ Nghĩa)</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="absolute top-[50%] left-[25%] transform -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-blue-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adj_desc')}>
-                  TÍNH TỪ (Adjectives) <br/><span className="text-xs font-normal text-blue-100">Bản chất Tĩnh</span>
+                <div className="absolute top-[45%] left-[25%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-blue-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adj_desc')}>
+                    TÍNH TỪ (Adjectives) <br/><span className="text-xs font-normal text-blue-100">Bản chất Tĩnh</span>
+                  </div>
                 </div>
-              </div>
-              <div className="absolute top-[50%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-emerald-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adv_manner')}>
-                  TRẠNG TỪ (Adverbs) <br/><span className="text-xs font-normal text-emerald-100">Bản chất Động</span>
+                <div className="absolute top-[45%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="bg-emerald-600 text-white px-5 py-2 rounded-lg shadow-md font-bold text-md border-2 border-emerald-400 hover:scale-110 transition-transform cursor-pointer text-center" onClick={() => onNodeClick('adv_manner')}>
+                    TRẠNG TỪ (Adverbs) <br/><span className="text-xs font-normal text-emerald-100">Bản chất Động</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="absolute top-[75%] left-[15%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_desc')}>
-                <div className="bg-white text-blue-800 px-3 py-2 rounded shadow text-sm font-semibold border border-blue-200">Miêu tả</div>
-              </div>
-              <div className="absolute top-[80%] left-[25%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_quant')}>
-                <div className="bg-white text-indigo-800 px-3 py-2 rounded shadow text-sm font-semibold border border-indigo-200">Định lượng</div>
-              </div>
-              <div className="absolute top-[75%] left-[35%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_irreg')}>
-                <div className="bg-white text-rose-800 px-3 py-2 rounded shadow text-sm font-semibold border border-rose-200 shadow-rose-200">Ngoại lệ</div>
-              </div>
+                <div className="absolute top-[75%] left-[15%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_desc')}>
+                  <div className="bg-white text-blue-800 px-3 py-2 rounded shadow text-sm font-semibold border border-blue-200">Miêu tả</div>
+                </div>
+                <div className="absolute top-[80%] left-[27%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_quant')}>
+                  <div className="bg-white text-indigo-800 px-3 py-2 rounded shadow text-sm font-semibold border border-indigo-200">Định lượng</div>
+                </div>
+                <div className="absolute top-[75%] left-[39%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adj_irreg')}>
+                  <div className="bg-white text-rose-800 px-3 py-2 rounded shadow text-sm font-semibold border border-rose-200 shadow-rose-200">Ngoại lệ</div>
+                </div>
 
-              <div className="absolute top-[75%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_manner')}>
-                <div className="bg-white text-emerald-800 px-3 py-2 rounded shadow text-sm font-semibold border border-emerald-200">Thể cách</div>
-              </div>
-              <div className="absolute top-[85%] left-[70%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_freq')}>
-                <div className="bg-white text-teal-800 px-3 py-2 rounded shadow text-sm font-semibold border border-teal-200">Tần suất</div>
-              </div>
-              <div className="absolute top-[85%] left-[80%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_degree')}>
-                <div className="bg-white text-cyan-800 px-3 py-2 rounded shadow text-sm font-semibold border border-cyan-200">Mức độ</div>
-              </div>
-              <div className="absolute top-[75%] left-[90%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_sentence')}>
-                <div className="bg-white text-green-800 px-3 py-2 rounded shadow text-sm font-semibold border border-green-200">Toàn câu</div>
+                <div className="absolute top-[75%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_manner')}>
+                  <div className="bg-white text-emerald-800 px-3 py-2 rounded shadow text-sm font-semibold border border-emerald-200">Thể cách</div>
+                </div>
+                <div className="absolute top-[85%] left-[70%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_freq')}>
+                  <div className="bg-white text-teal-800 px-3 py-2 rounded shadow text-sm font-semibold border border-teal-200">Tần suất</div>
+                </div>
+                <div className="absolute top-[85%] left-[80%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_degree')}>
+                  <div className="bg-white text-cyan-800 px-3 py-2 rounded shadow text-sm font-semibold border border-cyan-200">Mức độ</div>
+                </div>
+                <div className="absolute top-[75%] left-[90%] transform -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer hover:scale-110 transition-all" onClick={() => onNodeClick('adv_sentence')}>
+                  <div className="bg-white text-green-800 px-3 py-2 rounded shadow text-sm font-semibold border border-green-200">Toàn câu</div>
+                </div>
               </div>
             </div>
           );
