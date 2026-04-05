@@ -1,0 +1,422 @@
+import React, { useState } from 'react';
+import { BookOpen, Brain, PlayCircle, CheckCircle, XCircle, ArrowRight, Lightbulb, ShieldAlert } from 'lucide-react';
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('banchat');
+
+  const tabs = [
+    { id: 'banchat', name: 'Bản chất Cốt lõi', icon: Brain },
+    { id: 'make', name: 'Hệ thống MAKE', icon: BookOpen },
+    { id: 'let', name: 'Hệ thống LET', icon: BookOpen },
+    { id: 'practice', name: 'Thực hành', icon: PlayCircle },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Header */}
+        <header className="text-center mb-10">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500 mb-4">
+            Làm chủ MAKE & LET
+          </h1>
+          <p className="text-lg text-slate-600">Hiểu sâu bản chất - Vận dụng linh hoạt - Không cần học vẹt</p>
+        </header>
+
+        {/* Navigation */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm">
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                  activeTab === tab.id 
+                    ? 'bg-blue-600 text-white shadow-md transform scale-105' 
+                    : 'bg-transparent text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <Icon size={20} />
+                {tab.name}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Content Area */}
+        <div className="bg-white rounded-3xl shadow-xl p-6 md:p-10 min-h-[600px] border border-slate-100">
+          {activeTab === 'banchat' && <BanChatSection />}
+          {activeTab === 'make' && <MakeSection />}
+          {activeTab === 'let' && <LetSection />}
+          {activeTab === 'practice' && <PracticeSection />}
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+/* --- TAB 1: BẢN CHẤT --- */
+const BanChatSection = () => (
+  <div className="space-y-8 animate-fade-in">
+    <div className="text-center mb-8">
+      <h2 className="text-2xl font-bold text-slate-800 mb-2">Bí quyết nhớ lâu: Hiểu bản chất của từ</h2>
+      <p className="text-slate-600">Đừng nhớ công thức, hãy nhớ "cảm giác" mà từ mang lại.</p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-8">
+      {/* Bản chất MAKE */}
+      <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100 relative overflow-hidden">
+        <div className="absolute top-0 right-0 opacity-10">
+          <BookOpen size={150} className="text-blue-500" />
+        </div>
+        <h3 className="text-2xl font-black text-blue-700 mb-4 flex items-center gap-2">
+          <div className="bg-blue-600 w-3 h-8 rounded-full"></div> MAKE = Tác động lực
+        </h3>
+        <ul className="space-y-4 text-slate-700">
+          <li className="flex gap-3">
+            <CheckCircle className="text-blue-500 flex-shrink-0" />
+            <span><strong>Bản chất:</strong> Tạo ra một kết quả, ép buộc, hoặc biến đổi trạng thái. Có sự nỗ lực, áp đặt hoặc "tác động vật lý/tinh thần" ở đây.</span>
+          </li>
+          <li className="flex gap-3">
+            <CheckCircle className="text-blue-500 flex-shrink-0" />
+            <span><strong>Quy luật ngữ pháp:</strong> Khi tác động trực tiếp (Chủ động), hành động xảy ra ngay lập tức: <strong className="text-blue-600">Make + V(nguyên)</strong>.</span>
+          </li>
+          <li className="flex gap-3">
+            <CheckCircle className="text-blue-500 flex-shrink-0" />
+            <span><strong>Quy luật Bị động:</strong> Bị ép làm gì thì giống như bị đẩy đến một "đích đến". Tiếng Anh dùng "TO" để chỉ đích đến đó: <strong className="text-blue-600">Be made TO V</strong>.</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Bản chất LET */}
+      <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-100 relative overflow-hidden">
+        <div className="absolute top-0 right-0 opacity-10">
+          <Lightbulb size={150} className="text-emerald-500" />
+        </div>
+        <h3 className="text-2xl font-black text-emerald-700 mb-4 flex items-center gap-2">
+           <div className="bg-emerald-500 w-3 h-8 rounded-full"></div> LET = Rút lại lực cản
+        </h3>
+        <ul className="space-y-4 text-slate-700">
+          <li className="flex gap-3">
+            <CheckCircle className="text-emerald-500 flex-shrink-0" />
+            <span><strong>Bản chất:</strong> Cho phép, mở cửa, thả lỏng, không ngăn cấm. Hành động diễn ra tự nhiên.</span>
+          </li>
+          <li className="flex gap-3">
+            <CheckCircle className="text-emerald-500 flex-shrink-0" />
+            <span><strong>Quy luật ngữ pháp:</strong> Vì là "thả lỏng" (không có rào cản), động từ luôn đi thẳng không có rào cản "to": <strong className="text-emerald-600">Let + V(nguyên)</strong>.</span>
+          </li>
+          <li className="flex gap-3">
+            <CheckCircle className="text-emerald-500 flex-shrink-0" />
+            <span><strong>Quy luật Bị động:</strong> Người ta KHÔNG dùng "be let". Nếu muốn nói "được cho phép", tiếng Anh mượn từ khác nhẹ nhàng hơn: <strong className="text-emerald-600">Be allowed to V</strong>.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+);
+
+/* --- TAB 2: MAKE SECTION --- */
+const MakeSection = () => {
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <h2 className="text-3xl font-bold text-blue-700 mb-6">Các mô thức của MAKE</h2>
+      
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card 
+          title="1. Sai khiến (Chủ động)" 
+          formula="Make + SB + V(nguyên)"
+          example="He makes her do all the housework."
+          note="Anh ta BẮT cô ấy làm. Có sự áp đặt trực tiếp."
+          color="blue"
+        />
+        <Card 
+          title="2. Bị sai khiến (Bị động)" 
+          formula="S + Be + made + TO + V(nguyên)"
+          example="She is made TO do all the housework."
+          note="Cực kỳ quan trọng: Ở thể bị động, bắt buộc phải có TO (hướng tới hành động bị ép)."
+          color="rose"
+          icon={<ShieldAlert className="text-rose-500" />}
+        />
+        <Card 
+          title="3. Thay đổi trạng thái" 
+          formula="Make + SB/STH + Tính từ (Adj)"
+          example="The film makes me sad."
+          note="Bản chất: Tạo ra (make) trạng thái (sad) cho đối tượng (me)."
+          color="blue"
+        />
+        <div className="bg-orange-50 rounded-xl p-5 border border-orange-200 shadow-sm md:col-span-2">
+           <h4 className="font-bold text-orange-800 text-lg mb-2 flex items-center gap-2">
+             <Lightbulb className="text-orange-500"/> Cấu trúc cực dễ nhầm: Make Possible
+           </h4>
+           <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div className="bg-white p-3 rounded-lg">
+                 <p className="font-mono text-orange-600 font-bold">Make + IT + possible + TO V</p>
+                 <p className="text-sm mt-2">Dùng "IT" làm thế thân khi đằng sau là một <span className="font-bold">Động từ (To V)</span>.</p>
+                 <p className="text-sm italic mt-1 text-slate-500">The motorbike makes <span className="font-bold underline text-black">it</span> possible <span className="font-bold text-black">to go</span> to school.</p>
+              </div>
+              <div className="bg-white p-3 rounded-lg">
+                 <p className="font-mono text-orange-600 font-bold">Make + possible + Danh từ/Cụm N</p>
+                 <p className="text-sm mt-2">KHÔNG dùng "IT" khi đằng sau chỉ là một <span className="font-bold">Cụm danh từ</span>.</p>
+                 <p className="text-sm italic mt-1 text-slate-500">Internet makes possible <span className="font-bold text-black">faster communication</span>.</p>
+              </div>
+           </div>
+        </div>
+      </div>
+
+      {/* Cụm từ thông dụng */}
+      <div className="mt-8">
+        <h3 className="text-xl font-bold mb-4 border-b pb-2">Collocations & Phrasal Verbs hay gặp</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            {en: "Make a decision", vn: "Quyết định"},
+            {en: "Make up one's mind", vn: "Quyết định"},
+            {en: "Make a living", vn: "Kiếm sống"},
+            {en: "Make an effort", vn: "Nỗ lực"},
+            {en: "Make up (with sb)", vn: "Làm hòa/ Trang điểm"},
+            {en: "Make out", vn: "Hiểu ra (vấn đề)"},
+            {en: "Make a fuss", vn: "Làm ầm lên"},
+            {en: "Make progress", vn: "Tiến bộ"},
+          ].map((item, idx) => (
+            <div key={idx} className="bg-slate-100 hover:bg-blue-100 transition p-3 rounded-lg cursor-pointer group">
+              <p className="font-bold text-slate-800 group-hover:text-blue-700">{item.en}</p>
+              <p className="text-sm text-slate-600">{item.vn}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* --- TAB 3: LET SECTION --- */
+const LetSection = () => {
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <h2 className="text-3xl font-bold text-emerald-700 mb-6">Các mô thức của LET</h2>
+      
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card 
+          title="1. Cho phép (Chủ động)" 
+          formula="Let + O + V(nguyên)"
+          example="They let him go first."
+          note="Động từ luôn luôn là V nguyên thể, không bao giờ có TO."
+          color="emerald"
+        />
+        <Card 
+          title="2. Thay thế cho Bị động của Let" 
+          formula="Be allowed TO + V"
+          example="I am allowed TO go to the party."
+          note="Ta KHÔNG dùng 'I am let'. Luôn chuyển sang 'be allowed to' khi nói về người được cho phép."
+          color="rose"
+          icon={<ShieldAlert className="text-rose-500" />}
+        />
+        <Card 
+          title="3. Bị động với đồ vật/sự việc" 
+          formula="Let + Sth + Be + V3/ED"
+          example="Let the survey BE DONE by students."
+          note="Khá ít dùng, nghĩa là 'Hãy để việc đó được làm bởi...'"
+          color="emerald"
+        />
+        <Card 
+          title="4. Rủ rê, Đề xuất (Let's)" 
+          formula="Let's (not) + V(nguyên)"
+          example="Let's not stay here too long."
+          note="Bản chất là Let us (Cho phép chúng ta...). Khẳng định: Let's do. Phủ định: Let's not do."
+          color="emerald"
+        />
+      </div>
+
+       {/* Cụm từ thông dụng */}
+       <div className="mt-8">
+        <h3 className="text-xl font-bold mb-4 border-b pb-2 border-emerald-200">Idioms cực chất với LET</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {en: "Let alone...", vn: "Huống hồ là..., nói gì đến...", ex: "Can't walk, let alone run."},
+            {en: "Let one's hair down", vn: "Thư giãn, xõa đi", ex: "Go to the beach and let your hair down."},
+            {en: "Let someone off the hook", vn: "Tha cho ai, cứu bồ ai", ex: "The boss let me off the hook this time."},
+            {en: "Let off steam", vn: "Xả hơi, xả stress", ex: "Travel to let off steam."},
+            {en: "Let someone down", vn: "Làm ai thất vọng", ex: "Please don't let me down."},
+          ].map((item, idx) => (
+            <div key={idx} className="bg-slate-100 border-l-4 border-emerald-400 p-4 rounded-r-lg">
+              <p className="font-bold text-emerald-800 text-lg">{item.en}</p>
+              <p className="text-sm font-medium text-slate-700">{item.vn}</p>
+              <p className="text-sm italic text-slate-500 mt-1">"{item.ex}"</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* --- TAB 4: THỰC HÀNH TƯ DUY --- */
+const PracticeSection = () => {
+  const questions = [
+    {
+      q: "My teacher _____ me do a lot of homework yesterday.",
+      options: ["made", "made to", "let", "allowed"],
+      ans: "made",
+      explain: "Giáo viên 'bắt' làm bài tập -> Tác động áp đặt (Make). Vì là câu chủ động nên Make + O + V nguyên thể (do)."
+    },
+    {
+      q: "Because of my low score, I was _____ rewrite the essay.",
+      options: ["made", "made to", "let", "let to"],
+      ans: "made to",
+      explain: "Câu BỊ ĐỘNG của Make (I was...). Quy luật: Bị động phải có 'TO' -> be made TO V."
+    },
+    {
+      q: "My parents are quite strict. They rarely _____ me go out after 10 PM.",
+      options: ["make", "makes", "let", "let to"],
+      ans: "let",
+      explain: "Nghĩa là 'cho phép' (bố mẹ hiếm khi cho phép). Cấu trúc Let + O + V nguyên thể (go)."
+    },
+    {
+      q: "The new smart TV makes _____ watch movies easily from the Internet.",
+      options: ["possible to", "it possible to", "possible", "it possible"],
+      ans: "it possible to",
+      explain: "Phía sau là Động từ 'watch' (To V) -> Bắt buộc phải có 'IT' thế thân làm tân ngữ giả -> Make IT possible TO V."
+    },
+    {
+      q: "You look so stressed! You need a trip to _____ off steam.",
+      options: ["make", "let", "take", "do"],
+      ans: "let",
+      explain: "Idiom: 'Let off steam' nghĩa là xả hơi, xả stress."
+    }
+  ];
+
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+
+  const handleSelect = (opt) => {
+    if (selected) return; // Đã chọn rồi không cho chọn lại
+    setSelected(opt);
+    if (opt === questions[current].ans) {
+      setScore(s => s + 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (current < questions.length - 1) {
+      setCurrent(c => c + 1);
+      setSelected(null);
+    } else {
+      setFinished(true);
+    }
+  };
+
+  const restart = () => {
+    setCurrent(0);
+    setSelected(null);
+    setScore(0);
+    setFinished(false);
+  };
+
+  if (finished) {
+    return (
+      <div className="text-center py-10 animate-fade-in">
+        <h2 className="text-4xl font-bold mb-4">Hoàn thành!</h2>
+        <div className="text-6xl mb-6">🎯</div>
+        <p className="text-2xl font-bold text-blue-600 mb-2">Điểm của bạn: {score} / {questions.length}</p>
+        <p className="text-slate-600 mb-8">
+          {score === 5 ? 'Tuyệt đỉnh! Bạn đã hiểu hoàn toàn bản chất.' : 'Rất tốt! Hãy xem lại phần Bản chất nếu còn phân vân nhé.'}
+        </p>
+        <button onClick={restart} className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition">
+          Luyện tập lại
+        </button>
+      </div>
+    );
+  }
+
+  const q = questions[current];
+
+  return (
+    <div className="max-w-2xl mx-auto animate-fade-in">
+      <div className="flex justify-between items-center mb-6 text-sm font-bold text-slate-500">
+        <span>Câu hỏi {current + 1} / {questions.length}</span>
+        <span>Điểm: {score}</span>
+      </div>
+
+      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 mb-6 text-lg font-medium text-slate-800">
+        {q.q}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {q.options.map((opt, idx) => {
+          let btnClass = "p-4 rounded-xl border-2 font-bold transition text-left ";
+          
+          if (!selected) {
+            btnClass += "border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
+          } else {
+            if (opt === q.ans) {
+              btnClass += "border-emerald-500 bg-emerald-100 text-emerald-800"; // Câu đúng màu xanh
+            } else if (opt === selected && opt !== q.ans) {
+              btnClass += "border-rose-500 bg-rose-100 text-rose-800"; // Chọn sai màu đỏ
+            } else {
+              btnClass += "border-slate-200 opacity-50 text-slate-500"; // Các câu khác làm mờ
+            }
+          }
+
+          return (
+            <button 
+              key={idx} 
+              onClick={() => handleSelect(opt)}
+              disabled={!!selected}
+              className={btnClass}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+
+      {selected && (
+        <div className={`p-5 rounded-xl mb-6 ${selected === q.ans ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'} animate-fade-in`}>
+          <div className="font-bold flex items-center gap-2 mb-2">
+            {selected === q.ans ? <CheckCircle /> : <XCircle />}
+            {selected === q.ans ? 'Chính xác!' : 'Chưa đúng rồi!'}
+          </div>
+          <p className="text-sm"><strong>Phân tích bản chất:</strong> {q.explain}</p>
+        </div>
+      )}
+
+      {selected && (
+        <button 
+          onClick={handleNext}
+          className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2 hover:bg-slate-900 transition"
+        >
+          {current === questions.length - 1 ? 'Xem kết quả' : 'Câu tiếp theo'} <ArrowRight size={20} />
+        </button>
+      )}
+    </div>
+  );
+};
+
+/* UI Component Helper */
+const Card = ({ title, formula, example, note, color, icon }) => {
+  const colors = {
+    blue: "bg-blue-50 border-blue-200 text-blue-800",
+    emerald: "bg-emerald-50 border-emerald-200 text-emerald-800",
+    rose: "bg-rose-50 border-rose-200 text-rose-800",
+  };
+
+  return (
+    <div className={`p-5 rounded-xl border shadow-sm ${colors[color]}`}>
+      <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+        {icon} {title}
+      </h3>
+      <div className="bg-white/60 p-3 rounded-lg mb-3 font-mono font-bold text-center">
+        {formula}
+      </div>
+      <p className="italic text-slate-700 mb-2">VD: {example}</p>
+      <p className="text-sm border-t pt-2 mt-2 font-medium opacity-90 text-slate-600">
+        💡 {note}
+      </p>
+    </div>
+  )
+}
+
+export default App;
