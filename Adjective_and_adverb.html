@@ -34,7 +34,18 @@
         const { useState, useEffect } = React;
 
         // --- HỆ THỐNG DỮ LIỆU CỐT LÕI (BẢN CHẤT & QUY LUẬT) ---
-        const tagsData = ['#tất-cả', '#ngoại-lệ', '#vị-trí-linh-hoạt', '#trước-danh-từ', '#sau-động-từ', '#biến-đổi-hình-thái', '#chỉ-mức-độ', '#cấu-trúc-câu'];
+        const tagsData = [
+          '#tất-cả', 
+          '#ngoại-lệ', 
+          '#vị-trí-linh-hoạt', 
+          '#đầu/cuối-câu', 
+          '#trước-danh-từ', 
+          '#trước-tính/trạng-từ', 
+          '#sau-động-từ', 
+          '#biến-đổi-hình-thái', 
+          '#chỉ-mức-độ', 
+          '#cấu-trúc-câu'
+        ];
 
         const grammarData = {
           adjectives: [
@@ -42,9 +53,9 @@
               id: 'adj_desc',
               title: 'Tính từ Miêu tả (Descriptive)',
               icon: <i className="fa-solid fa-book-open text-[18px]"></i>,
-              nature: 'Bản chất tĩnh. Mang tính gán mác, định hình tính chất, hình dáng, màu sắc, trạng thái của một sự vật/hiện tượng.',
-              rules: 'Thường đứng TRƯỚC danh từ hoặc SAU động từ liên kết (tobe, seem, feel, look...).',
-              tags: ['#trước-danh-từ', '#biến-đổi-hình-thái'],
+              nature: 'Bản chất tĩnh. Định hình tính chất, hình dáng, màu sắc. Có thể biến đổi hình thái (thêm -er, -est) trong cấu trúc so sánh.',
+              rules: 'Đứng TRƯỚC danh từ để bổ nghĩa trực tiếp, hoặc đứng SAU động từ liên kết (tobe, seem, feel, look...) để miêu tả chủ ngữ.',
+              tags: ['#trước-danh-từ', '#sau-động-từ', '#biến-đổi-hình-thái'],
               examples: ['A *beautiful* painting.', 'The soup smells *delicious*.'],
               relations: ['Sinh ra Trạng từ Thể cách bằng cách thêm đuôi "-ly".'],
               color: 'bg-blue-50 border-blue-200 text-blue-900',
@@ -54,9 +65,9 @@
               id: 'adj_quant',
               title: 'Tính từ Định lượng (Quantitative)',
               icon: <i className="fa-solid fa-layer-group text-[18px]"></i>,
-              nature: 'Bản chất đo lường. Xác định số lượng, dung lượng của danh từ mà không cần số đếm chính xác.',
-              rules: 'Luôn đứng TRƯỚC danh từ. Quyết định danh từ theo sau là số ít, số nhiều hay không đếm được.',
-              tags: ['#trước-danh-từ', '#cấu-trúc-câu'],
+              nature: 'Bản chất đo lường. Xác định số lượng, dung lượng của danh từ mà không cần số đếm chính xác, thể hiện mức độ nhiều/ít.',
+              rules: 'Luôn đứng TRƯỚC danh từ. Quyết định chặt chẽ đến cấu trúc câu (buộc động từ theo sau chia số ít hay số nhiều).',
+              tags: ['#trước-danh-từ', '#chỉ-mức-độ', '#cấu-trúc-câu'],
               examples: ['*Many* people', '*Much* water', '*Several* options'],
               relations: ['Có sự tương đồng với Trạng từ Mức độ về mặt ý nghĩa đo lường.'],
               color: 'bg-indigo-50 border-indigo-200 text-indigo-900',
@@ -66,9 +77,9 @@
               id: 'adj_irreg',
               title: 'Tính từ Ngoại lệ (Irregular)',
               icon: <i className="fa-solid fa-bolt text-[18px]"></i>,
-              nature: 'Phá vỡ quy tắc hình thái thông thường, không thay đổi dạng hoặc biến đổi hoàn toàn khi chuyển sang trạng từ hoặc so sánh.',
-              rules: 'Cần học thuộc lòng. Một số từ vừa là tính từ vừa là trạng từ.',
-              tags: ['#ngoại-lệ', '#vị-trí-linh-hoạt'],
+              nature: 'Phá vỡ quy tắc hình thái thông thường. Không thay đổi dạng (fast, hard) hoặc biến đổi hoàn toàn (good -> well) khi chuyển từ.',
+              rules: 'Vị trí rất linh hoạt tùy ngữ cảnh. Cần phân tích vị trí cấu trúc trong câu để biết nó đang đóng vai trò Tính từ hay Trạng từ.',
+              tags: ['#ngoại-lệ', '#vị-trí-linh-hoạt', '#biến-đổi-hình-thái'],
               examples: ['*Good* (adj) -> Well (adv)', '*Fast* (adj) -> Fast (adv)', '*Hard* (adj) -> Hard (adv)'],
               relations: ['Là điểm giao thoa phức tạp nhất giữa Tính từ và Trạng từ.'],
               color: 'bg-rose-50 border-rose-200 text-rose-900',
@@ -79,10 +90,10 @@
             {
               id: 'adv_manner',
               title: 'Trạng từ Thể cách (Manner)',
-              icon: <i className="fa-solid fa-chart-line text-[18px]"></i>,
-              nature: 'Bản chất động. Trả lời câu hỏi "Như thế nào?". Mô tả CÁCH THỨC một hành động diễn ra.',
-              rules: 'Thường đứng SAU động từ thường hoặc sau tân ngữ (nếu có). KHÔNG đứng giữa động từ và tân ngữ.',
-              tags: ['#sau-động-từ', '#biến-đổi-hình-thái'],
+              icon: <i className="fa-solid fa-person-running text-[18px]"></i>,
+              nature: 'Bản chất động. Mô tả chi tiết CÁCH THỨC một hành động diễn ra (nhanh, chậm, cẩn thận...). Thường mang hậu tố -ly.',
+              rules: 'Đứng SAU động từ thường hoặc sau tân ngữ. Đặc biệt lưu ý cấu trúc: Không bao giờ đứng xen giữa động từ và tân ngữ trực tiếp.',
+              tags: ['#sau-động-từ', '#biến-đổi-hình-thái', '#cấu-trúc-câu'],
               examples: ['She sings *beautifully*.', 'He drives the car *carefully*.'],
               relations: ['Hầu hết được hình thành từ Tính từ Miêu tả + hậu tố "-ly".'],
               color: 'bg-emerald-50 border-emerald-200 text-emerald-900',
@@ -91,10 +102,10 @@
             {
               id: 'adv_freq',
               title: 'Trạng từ Tần suất (Frequency)',
-              icon: <i className="fa-solid fa-chart-line text-[18px]"></i>,
-              nature: 'Bản chất chu kỳ. Trả lời câu hỏi "Bao lâu một lần?". Xác định độ lặp lại của hành động.',
-              rules: 'Vị trí đặc biệt: TRƯỚC động từ thường, nhưng SAU động từ tobe/trợ động từ.',
-              tags: ['#vị-trí-linh-hoạt', '#cấu-trúc-câu'],
+              icon: <i className="fa-solid fa-clock-rotate-left text-[18px]"></i>,
+              nature: 'Bản chất chu kỳ. Xác định mức độ lặp lại của hành động (luôn luôn, thỉnh thoảng, không bao giờ...).',
+              rules: 'Vị trí rất linh hoạt nhưng có quy tắc: Đứng TRƯỚC động từ thường, nhưng đứng SAU động từ tobe / trợ động từ.',
+              tags: ['#vị-trí-linh-hoạt', '#sau-động-từ', '#cấu-trúc-câu'],
               examples: ['I *always* wake up early.', 'She is *never* late.'],
               relations: ['Bổ sung ý nghĩa thời gian vi mô cho động từ.'],
               color: 'bg-teal-50 border-teal-200 text-teal-900',
@@ -103,11 +114,11 @@
             {
               id: 'adv_degree',
               title: 'Trạng từ Mức độ (Degree)',
-              icon: <i className="fa-solid fa-chart-line text-[18px]"></i>,
-              nature: 'Bản chất khuếch đại/thu hẹp. Trả lời câu hỏi "Đến mức nào?". Dùng để tăng giảm sắc thái.',
-              rules: 'Thường đứng TRƯỚC Tính từ, Trạng từ khác, hoặc Động từ mà nó bổ nghĩa.',
-              tags: ['#chỉ-mức-độ', '#trước-danh-từ'],
-              examples: ['The water is *extremely* cold.', 'I *quite* agree with you.'],
+              icon: <i className="fa-solid fa-temperature-arrow-up text-[18px]"></i>,
+              nature: 'Bản chất khuếch đại/thu hẹp. Dùng để tăng giảm sắc thái, giới hạn mức độ của một tính chất hoặc hành động.',
+              rules: 'Thường đứng ngay TRƯỚC Tính từ hoặc Trạng từ khác để bổ nghĩa cho chúng. Tác động mạnh đến cấu trúc nhấn mạnh của câu.',
+              tags: ['#chỉ-mức-độ', '#trước-tính/trạng-từ', '#cấu-trúc-câu'],
+              examples: ['The water is *extremely* cold.', 'He runs *very* fast.'],
               relations: ['Kẻ "nâng đỡ" cho Tính từ và các Trạng từ khác, tạo ra chiều sâu cho câu.'],
               color: 'bg-cyan-50 border-cyan-200 text-cyan-900',
               tagColor: 'bg-cyan-100 text-cyan-700'
@@ -115,12 +126,12 @@
             {
               id: 'adv_sentence',
               title: 'Trạng từ Liên kết / Toàn câu (Sentence)',
-              icon: <i className="fa-solid fa-chart-line text-[18px]"></i>,
+              icon: <i className="fa-solid fa-comment-dots text-[18px]"></i>,
               nature: 'Bản chất thái độ/logic. Thể hiện quan điểm của người nói về toàn bộ sự việc hoặc nối logic giữa các câu.',
-              rules: 'Thường đứng ĐẦU câu, ngăn cách với câu bằng dấu phẩy (,).',
-              tags: ['#cấu-trúc-câu', '#vị-trí-linh-hoạt'],
-              examples: ['*Fortunately*, we arrived in time.', '*However*, the weather was bad.'],
-              relations: ['Nằm ngoài cấu trúc nòng cốt của câu, đóng vai trò như người dẫn chuyện.'],
+              rules: 'Vị trí rất linh hoạt, nhưng phổ biến nhất là đứng ĐẦU CÂU hoặc CUỐI CÂU, ngăn cách với mệnh đề chính bằng dấu phẩy (,).',
+              tags: ['#đầu/cuối-câu', '#vị-trí-linh-hoạt', '#cấu-trúc-câu'],
+              examples: ['*Fortunately*, we arrived in time.', 'The weather was bad, *however*.'],
+              relations: ['Nằm ngoài cấu trúc ngữ pháp nòng cốt của câu, đóng vai trò như người dẫn chuyện.'],
               color: 'bg-green-50 border-green-200 text-green-900',
               tagColor: 'bg-green-100 text-green-700'
             }
@@ -132,35 +143,51 @@
           return (
             // Wrapper overflow-x-auto giúp tránh lỗi chồng chéo khi thu nhỏ màn hình
             <div className="w-full overflow-x-auto bg-slate-50 rounded-2xl border border-slate-200 shadow-inner">
-              <div className="relative min-w-[1000px] h-[600px] flex items-center justify-center p-8 mx-auto">
+              <div className="relative w-[1000px] h-[600px] mx-auto">
                 {/* Background Grid */}
                 <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
                 
-                {/* SVG Connecting Lines */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                {/* SVG Connecting Lines - Đã thiết lập viewBox và tọa độ pixel */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 600">
+                  {/* Định nghĩa các đầu mũi tên (Arrowheads) */}
+                  <defs>
+                    <marker id="arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#94a3b8" />
+                    </marker>
+                    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#bfdbfe" />
+                    </marker>
+                    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#a7f3d0" />
+                    </marker>
+                    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b" />
+                    </marker>
+                  </defs>
+
                   {/* Lines from Root */}
-                  <path d="M 50% 15% Q 30% 25% 25% 45%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
-                  <path d="M 50% 15% Q 70% 25% 75% 45%" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" />
+                  <path d="M 500 126 Q 300 150 250 234" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" markerEnd="url(#arrow-slate)" />
+                  <path d="M 500 126 Q 700 150 750 234" stroke="#94a3b8" strokeWidth="2" fill="none" strokeDasharray="5,5" markerEnd="url(#arrow-slate)" />
                   
                   {/* Adjectives Lines */}
-                  <path d="M 25% 45% L 15% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
-                  <path d="M 25% 45% L 27% 80%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
-                  <path d="M 25% 45% L 39% 75%" stroke="#bfdbfe" strokeWidth="3" fill="none" />
+                  <path d="M 230 306 L 150 426" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
+                  <path d="M 250 306 L 270 456" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
+                  <path d="M 270 306 L 390 426" stroke="#bfdbfe" strokeWidth="3" fill="none" markerEnd="url(#arrow-blue)" />
 
                   {/* Adverbs Lines */}
-                  <path d="M 75% 45% L 60% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                  <path d="M 75% 45% L 70% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                  <path d="M 75% 45% L 80% 85%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
-                  <path d="M 75% 45% L 90% 75%" stroke="#a7f3d0" strokeWidth="3" fill="none" />
+                  <path d="M 730 306 L 600 426" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
+                  <path d="M 740 306 L 700 486" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
+                  <path d="M 760 306 L 800 486" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
+                  <path d="M 770 306 L 900 426" stroke="#a7f3d0" strokeWidth="3" fill="none" markerEnd="url(#arrow-emerald)" />
 
                   {/* Cross Relationships */}
-                  {/* 1. Miêu tả (15% 75%) -> Thể cách (60% 75%) */}
-                  <path d="M 15% 75% Q 37.5% 60% 60% 75%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
-                  <text x="37.5%" y="64%" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Thêm đuôi "-ly"</text>
+                  {/* 1. Miêu tả (150, 450) -> Thể cách (600, 450) */}
+                  <path d="M 180 450 Q 375 360 560 450" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" markerEnd="url(#arrow-amber)" />
+                  <text x="375" y="384" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Thêm đuôi "-ly"</text>
                   
-                  {/* 2. Định lượng (27% 80%) -> Mức độ (80% 85%) */}
-                  <path d="M 27% 80% Q 53.5% 95% 80% 85%" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" />
-                  <text x="53.5%" y="90%" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Cùng bổ nghĩa mức độ</text>
+                  {/* 2. Định lượng (270, 480) -> Mức độ (800, 510) */}
+                  <path d="M 320 480 Q 535 570 750 510" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="4,4" opacity="0.6" markerEnd="url(#arrow-amber)" />
+                  <text x="535" y="540" fill="#d97706" fontSize="13" fontWeight="bold" textAnchor="middle">Cùng bổ nghĩa mức độ</text>
                 </svg>
 
                 {/* Nodes */}
